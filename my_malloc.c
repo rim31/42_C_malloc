@@ -53,7 +53,6 @@ void ft_check_free(t_block* ptr, size_t size)
 
 	i = 0;
 	if (size <= TINY)
-		printf("check free");
 	while(ptr->free[i] == 0 || i < 100)
 		i++;
 }
@@ -131,11 +130,11 @@ void *ft_init(size_t size){
 			lst->free[i] = size;
 		else
 			lst->free[i] = 0;
-		// printf("%lu %d | ",(unsigned long)lst->tab[i], i);
+		// printf("%lu %d| ",(unsigned long)lst->tab[i], i);
 		i++;
 	}
 	lst->next = NULL;
-	printf("p* + struct %lu || %lu\n=======ft_init done========\n", (unsigned long)lst->next, META_SIZE + 100 * TINY);
+	printf("p* + struct %lu ||| %lu\n=======ft_init done========\n", (unsigned long)lst->next, META_SIZE+100*TINY);
 	return ((void*)(lst + META_SIZE));
 }
 
@@ -156,38 +155,37 @@ void	*ft_malloc(size_t size)
 	else
 	{
 		tmp = lst;
-		while(tmp)
+		printf("BASE existe deja => recherche du ptr* FREE\n");
+		if (size <= TINY)
 		{
-			printf("BASE existe deja => recherche du ptr* FREE\n");
-			if (size <= TINY)
+			while(tmp->free[i] && i <= 99)
+				i++;
+			if (i <= 99)//tes
 			{
-				while(tmp->free[i] && i <= 99)
-					i++;
-				if (i <= 99)//tes
-				{
-					tmp->free[i] = size;
-					printf("%lu *tmp => je remplis le free\n", (unsigned long)tmp->tab[i]);
-					return(tmp->tab[i]);
-				}
-				else if(i > 99)
-				{
-					base = mmap(0, getpagesize() * 1, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-					tmp->next = base;
-					printf("REFAIRE un MMAP --> %lu\n", (unsigned long)tmp->next);
-
-					i = 0;
-					while(i < 100)
-					{
-						tmp->tab[i] = tmp + META_SIZE + (TINY * i);
-						tmp->free[i] = 0;
-						i++;
-					}
-					copy = tmp;
-					copy->next = NULL;
-					ft_malloc(size);
-				}
+				tmp->free[i] = size;
+				printf("%lu *tmp => je remplis le free\n", (unsigned long)tmp->tab[i]);
+				return(tmp->tab[i]);
 			}
-			tmp = tmp->next;
+			else if(i > 99)
+			{
+				base = mmap(0, getpagesize() * 1, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+				// tmp->next = tmp;
+				tmp->next = base;
+				printf("REFAIRE un MMAP --> %lu\n", (unsigned long)tmp->next);
+
+				i = 0;
+				while(i < 100)
+				{
+					tmp->tab[i] = tmp + META_SIZE + (TINY * i);
+					tmp->free[i] = 0;
+					i++;
+				}
+				copy = tmp;
+				copy->next = NULL;
+				// ft_printtab();
+				// ft_init_tiny(size);
+				ft_malloc(size);
+			}
 		}
 	}
 	return (base);
