@@ -158,7 +158,7 @@ void	*ft_malloc(size_t size)
 		tmp = lst;
 		while(tmp)
 		{
-			printf("BASE existe deja => recherche du ptr* FREE\n");
+			// printf("BASE existe deja => recherche du ptr* FREE\n");
 			if (size <= TINY)
 			{
 				while(tmp->free[i] && i <= 99)
@@ -166,7 +166,7 @@ void	*ft_malloc(size_t size)
 				if (i <= 99)//tes
 				{
 					tmp->free[i] = size;
-					printf("%lu *tmp => je remplis le free\n", (unsigned long)tmp->tab[i]);
+					// printf("%lu *tmp => je remplis le free\n", (unsigned long)tmp->tab[i]);
 					return(tmp->tab[i]);
 				}
 				else if(i > 99)
@@ -201,7 +201,7 @@ int 	main(int ac, char **av)
 	i = 0;
 	if(ac == 2)
 	{
-		while (i < 6)
+		while (i < 106)
 		{
 			ft_malloc(ft_size(atoi(av[1])));
 			i++;

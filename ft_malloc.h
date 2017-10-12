@@ -18,9 +18,9 @@
 #include <assert.h>
 #include <sys/mman.h>
 
-#define TINY_BLOCK  1
-#define TINY  (TINY_BLOCK*4096 - sizeof(t_block)) / 100
-#define SMALL_BLOCK  26*4096
+#define TINY_BLOCK  1*4096
+#define TINY  (TINY_BLOCK - sizeof(t_block)) / 100
+#define SMALL_BLOCK  3*4096
 #define SMALL  (SMALL_BLOCK - sizeof(t_block)) / 100
 // #define TINY 32
 // #define SMALL 128

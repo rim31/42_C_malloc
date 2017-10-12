@@ -35,6 +35,8 @@ void ft_printtab()
 		i = 0;
 		while(i < 100){
 			printf("%lu %s %d | ", (unsigned long)tmp->tab[i], (tmp->free[i]) ? "." : "FREE", i);
+			// if (tmp->free[i])
+				// printf("\n%lu %d \n ", (unsigned long)tmp->tab[i], (tmp->free[i]));
 			i++;
 		}
 		tmp = tmp->next;
@@ -101,7 +103,7 @@ void *find_empty_bloc(t_block *tmp, size_t size)
 	{
 		if  (tmp->free[i] == 0 && size <= TINY)
 		{
-			printf("%lu *ptr MALLOC trouve \n", (unsigned long)tmp->tab[i]);
+			// printf("%lu *ptr MALLOC trouve \n", (unsigned long)tmp->tab[i]);
 			tmp->free[i] = size;
 			return(tmp->tab[i]);
 		}
@@ -109,11 +111,114 @@ void *find_empty_bloc(t_block *tmp, size_t size)
 	}
 	// add_block(size);
 	// ft_malloc(size);
-
 	return (NULL);
 }
 
 
+void ft_munmap(void)
+{
+	t_block *tmp;
+	int i;
+	int list_free;
+
+	tmp = lst;
+	while(tmp->next)
+	{
+		i = 0;
+		list_free = 1;
+		while(i < 100)
+		{
+			if (tmp->free[i] != 0)
+				list_free = 0;
+			i++;
+		}
+		if (list_free == 1)
+		{
+			printf("NUMAP !!");
+			munmap(tmp, 4096);
+			if (tmp->next == NULL)
+				tmp = NULL;
+			else
+				tmp = tmp->next->next;
+		}
+		tmp = tmp->next;
+	}
+	printf("liste_free %d !!", list_free);
+
+}
+
+void ft_free(void *ptr)
+{
+	t_block *tmp;
+	int i;
+
+	if (ptr == NULL)
+		return;
+	tmp = lst;
+	printf("COUCOU");
+	// while(tmp)
+	// {
+		i = 0;
+		while(i < 100)
+		{
+			// printf(" %lu %d ||", (unsigned long)tmp->tab[i], (tmp->free[i]));
+			if (tmp->tab[i] == ptr)
+			{
+				printf("FREE trouvee %lu\n", (unsigned long)ptr );
+				tmp->free[i] = 0;
+			}
+			i++;
+		}
+	// 	if (tmp->next)
+	// 		tmp = tmp->next;
+	// 	else
+	// 		break;
+	// }
+	// ft_munmap();
+	return;
+}
+
+// void ft_copy(void *ptr)
+// {
+// 	int i;
+//
+// 	i = 0;
+// 	while(i < 100 && tmp->tab[i] != ptr)
+// 	{
+// 		if  (tmp->free[i] == 0 && size <= TINY)
+// 		{
+// 			// printf("%lu *ptr MALLOC trouve \n", (unsigned long)tmp->tab[i]);
+// 			tmp->free[i] = size;
+// 			return(tmp->tab[i]);
+// 		}
+// 		i++;
+// 	}
+// 	return (NULL);
+//
+// }
+
+void 	*ft_realloc(void *ptr, size_t size)
+{
+	t_block *tmp;
+	t_block *base;
+	int i;
+
+	if (size <= 0)
+		exit(0);
+	tmp = lst;
+	while(tmp && !base)
+	{
+		base = find_empty_bloc(tmp, size);
+		tmp = tmp->next;
+	}
+	if (!base)
+	{
+		printf("\n%lu *ptr ADD_BLOCK \n", (unsigned long)base);
+		add_block(size);
+		ft_malloc(size);
+	}
+	return (base);
+}
 
 void	*ft_malloc(size_t size)
 {
@@ -146,16 +251,39 @@ int 	main(int ac, char **av)
 {
 	int i;
 	t_block *tmp;
+	void *test;
+	void *free_test[100];
 
 	i = 0;
 	if(ac == 2)
 	{
-		while (i < 104)
+		while (i < 9)
 		{
-			// ft_malloc(atoi(av[1]));
-			printf("\n%lu *malloc \n", (unsigned long)ft_malloc(atoi(av[1])));
+			// printf("\n%lu *malloc \n", (unsigned long)ft_malloc(atoi(av[1])));
+			if (i >= 0 && i < 10)
+			{
+				free_test[i] = ft_malloc(atoi(av[1]));
+				printf("\n%lu *free_malloc %d\n", (unsigned long)free_test[i], i);
+			}
+			else
+				ft_malloc(atoi(av[1]));
 			i++;
 		}
+	}
+	ft_printtab();
+	printf("\n==========FREE=========\n");
+	// i = 0;
+	// ft_free(free_test[i]);
+	// printf("\n%lu *free_malloc %d\n", (unsigned long)free_test[i], i);
+	// printf("\n==========FREE=========\n");
+
+	i = 0;
+	while (i < 10)
+	{
+		// printf("\n%lu *free_malloc \n", (unsigned long)free_test[i]);
+		if (free_test[i])
+			ft_free(free_test[i]);
+		i++;
 	}
 	ft_printtab();
 	printf("taille de la structure ===> %lu + %lu\n", META_SIZE, TINY*100);
