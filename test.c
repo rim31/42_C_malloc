@@ -121,67 +121,58 @@ void ft_print(void)
 	tmp = lst;
 	while(tmp)
 	{
-		// printf(" %lu ==>", (unsigned long)tmp);
+		printf(" %lu ==>", (unsigned long)tmp);
 		tmp = tmp->next;
 	}
 }
 
 
+int ft_loop(t_block *ptr)
+{
+	int i;
+	int list_free;
+
+	i = 0;
+	list_free = 1;
+	while(i < 100)
+	{
+		if (ptr->free[i] != 0)
+			list_free = 0;
+		i++;
+	}
+	return (list_free);
+}
+
 void ft_munmap(void)
 {
 	t_block *address;
 	t_block *tmp;
-	int i;
 	int list_free;
-	int len;
+	int i;
 
 	tmp = lst;
 	while(lst)
 	{
-		i = 0;
-		list_free = 1;
-		while(i < 100)
-		{
-			if (lst->free[i] != 0)
-				list_free = 0;
-			i++;
-		}
-		// printf(" (%d) ==>", list_free);
-
+		list_free = ft_loop(lst);
 		if (list_free == 1)
 		{
-			// address = (t_block *)((void *)lst - META_SIZE);
 			address = (void *)lst;
-			printf("{ ADDRESS %lu }", (unsigned long)address);
+			printf("{{{{{ ADDRESS %lu }}}}}", (unsigned long)address);
 			if ( address != NULL )
 			{
 			  printf(" munmap");
 				if (lst->next == NULL)
-				{
-					printf(" A ");
-					address = lst;
 					lst = NULL;
-					if ( munmap(address, 4096 )  == -1)
-						printf("ERROR");
-				}
 				else
-				{
-					printf("B ADDRESS %lu ", (unsigned long)address->next);
-					address = lst;
 					lst = lst->next;
-					if ( munmap(address, 4096 )  == -1)
-						printf("ERROR");
-
-				}
+				if ( munmap(address, 4096 )  == -1)
+					printf("ERROR");
 			}
 		}
 		if (lst->next)
 			lst = lst->next;
 		else
-		{
-			// printf(" test %lu ", (unsigned long)tmp);
 			break;
-		}
 	}
 }
 
@@ -211,7 +202,7 @@ void ft_free(void *ptr)
 		else
 			break;
 	}
-	ft_munmap();
+	// ft_munmap();
 	return;
 }
 
@@ -294,7 +285,7 @@ int 	main(int ac, char **av)
 	i = 0;
 	if(ac == 2)
 	{
-		while (i < 109)
+		while (i < 209)
 		{
 			// printf("\n%lu *malloc \n", (unsigned long)ft_malloc(atoi(av[1])));
 			if (i >= 0 && i < 100)
@@ -322,9 +313,12 @@ int 	main(int ac, char **av)
 			ft_free(free_test[i]);
 		i++;
 	}
-	ft_print();
-	// ft_munmap();
 
+	ft_print();
+	ft_printtab();
+	printf("\n==========nummap=========\n");
+
+	ft_munmap();
 	ft_printtab();
 	printf("taille de la structure ===> %lu + %lu\n", META_SIZE, TINY*100);
 	return (0);
