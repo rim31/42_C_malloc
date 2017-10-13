@@ -33,15 +33,15 @@
 
 typedef struct 			s_block {
 	void		    			*ptr;/* le pointeur sur les données, pour le contrôleur d'erreur de free; */
-	int								free[100];/*  indicateur de disponibilité du bloc;*/
+	int							free[100];/*  indicateur de disponibilité du bloc;*/
 	size_t						size;/* la taille du bloc alloué;*/
 	// int					iteration;/* la taille du bloc alloué;*/
-	struct s_block    *next;/* les pointeurs sur les méta-données des blocs suivants et précédants;*/
+	struct s_block    	*next;/* les pointeurs sur les méta-données des blocs suivants et précédants;*/
 	struct s_block		*prev;
 	/* A pointer to the allocated block */
 	// char				data[1];
 	// /*====================*/
-	// size_t       		nb;
+	size_t       		dontfree;
 	// char          		*str;
 	void 							*tab[100];
 }						t_block;
