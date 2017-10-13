@@ -71,19 +71,19 @@ void ft_init(size_t size){
 	// return ((void*)(lst + META_SIZE));
 }
 
-void add_block(size_t size)
+void *add_block(size_t size)
 {
 	t_block *base;
 	t_block *tmp;
 	int i;
 
+	i = 0;
 	tmp = lst;
 	while(tmp->next)
 		tmp = tmp->next;
 	base = mmap(0, getpagesize() * TINY_BLOCK, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	tmp->next = base;
 	base->prev = tmp;
-	i = 0;
 	base->ptr = base;
 	if (size < TINY)
 		base->size = TINY;
@@ -93,8 +93,10 @@ void add_block(size_t size)
 		base->free[i] = 0;
 		i++;
 	}
+	printf("+++ %lu | %lu +++ ", (unsigned long)base, (unsigned long)base->tab[0]);
 	base->next = NULL;
-	base->prev = tmp;// ! attention
+	base->prev = tmp;
+	return base;
 }
 
 void *find_empty_bloc(t_block *tmp, size_t size)
@@ -125,34 +127,12 @@ void ft_print(void)
 	tmp = lst;
 	while(tmp)
 	{
-		printf(" %lu (prev: %lu / next:%lu)==>", (unsigned long)tmp, (unsigned long)tmp->prev, (unsigned long)tmp->next);
+		printf(" %lu (prev: %lu / next:%lu / tab[1]:%lu)==>", (unsigned long)tmp, (unsigned long)tmp->prev, (unsigned long)tmp->next,  (unsigned long)tmp->tab[0]);
 		tmp = tmp->next;
 	}
 }
 
-
-// static int  ft_del_split(t_block **line, t_shell *shell)
-// {
-//     t_block  *tmp;
-
-//     tmp = (*line)->end;
-//     if (!tmp)
-//         return (0);
-//     (*line)->end = tmp->prev;
-// 	if ((*line)->end)
-// 		(*line)->end->next = NULL;
-//     else
-//     {
-// 		(*line)->begin = NULL;
-// 		return (0);
-// 	}
-// 	(*line)->end->s_pos = 1;
-// 	shell->line->last = 1;
-// 	return (1);
-// }
-
-
-int ft_loop(t_block *ptr)
+int ft_loop(t_block *ptr)//for ft_nummap()
 {
 	int i;
 	int list_free;
@@ -170,12 +150,12 @@ int ft_loop(t_block *ptr)
 
 void ft_munmap(void)
 {
-	t_block *address;
 	t_block *tmp;
 
 		tmp = lst;
 	while(tmp)
 	{	
+		// if (ft_loop(tmp) && !tmp->dontfree)
 		if (ft_loop(tmp))
 		{	
 			if (tmp->next)
@@ -206,12 +186,10 @@ void ft_free(void *ptr)
 		i = 0;
 		while(i < 100)
 		{
-			// printf(" %lu %d ||", (unsigned long)tmp->tab[i], (tmp->free[i]));
 			if (tmp->tab[i] == ptr)
 			{
-				// printf("FREE trouvee %lu : ", (unsigned long)ptr );
 				tmp->free[i] = 0;
-
+				// printf("TROUVEE &FREE !!!!!!!!!!!!\n");
 			}
 			i++;
 		}
@@ -220,7 +198,7 @@ void ft_free(void *ptr)
 		else
 			break;
 	}
-	// ft_munmap();
+	ft_munmap();
 	return;
 }
 
@@ -298,18 +276,19 @@ int 	main(int ac, char **av)
 	int i;
 	t_block *tmp;
 	void *test;
-	void *free_test[100];
+	void *free_test[200];
 
 	i = 0;
 	if(ac == 2)
 	{
-		while (i < 209)
+		while (i < 300)
 		{
 			// printf("\n%lu *malloc \n", (unsigned long)ft_malloc(atoi(av[1])));
-			if (i >= 0 && i < 100)
+			if (i == 0)
+			// if (i >= 0 && i < 100)
 			{
 				free_test[i] = ft_malloc(atoi(av[1]));
-				// printf("\n%lu *free_malloc %d", (unsigned long)free_test[i], i);
+				printf("\n%lu *free_malloc %d", (unsigned long)free_test[i], i);
 			}
 			else
 				ft_malloc(atoi(av[1]));
@@ -318,26 +297,22 @@ int 	main(int ac, char **av)
 	}
 	ft_printtab();
 	printf("\n==========FREE=========\n");
-	// i = 0;
-	// ft_free(free_test[i]);
-	// printf("\n%lu *free_malloc %d\n", (unsigned long)free_test[i], i);
-	// printf("\n==========FREE=========\n");
-
 	i = 0;
-	while (i < 100)
+	// while (i < 101)
 	{
-		// printf("\n%lu *free_malloc \n", (unsigned long)free_test[i]);
-		if (free_test[i])
+		// printf("\n%lu ==============> free_malloc \n", (unsigned long)free_test[i]);
+		// if (free_test[i])
 			ft_free(free_test[i]);
 		i++;
 	}
 
 	ft_print();
 	ft_printtab();
-	printf("\n==========nummap=========\n");
+	// printf("\n==========nummap=========\n");
 
-	ft_munmap();
-	ft_printtab();
+	// ft_munmap();
+	// ft_print();
+	// ft_printtab();
 	printf("taille de la structure ===> %lu + %lu\n", META_SIZE, TINY*100);
 	return (0);
 }
