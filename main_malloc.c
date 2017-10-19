@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.c                                        :+:      :+:    :+:   */
+/*   ft_ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oseng <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/malloc.h"
+#include "ft_ft_malloc.h"
+#define META_SIZE sizeof(t_block)
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oseng <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/09/07 15:37:51 by oseng             #+#    #+#             */
+/*   Updated: 2017/09/07 15:40:28 by oseng            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/ft_malloc.h"
 #define META_SIZE sizeof(t_block)
 
 void ft_print(void)
@@ -198,7 +212,7 @@ void ft_munmap(void)
 	}
 }
 
-void free(void *ptr)
+void ft_free(void *ptr)
 {
 	t_block *tmp;
 	int i;
@@ -227,7 +241,7 @@ void free(void *ptr)
 	return;
 }
 
-void free1(void *ptr)
+void ft_free1(void *ptr)
 {
 	t_block *tmp;
 	int i;
@@ -250,7 +264,7 @@ void free1(void *ptr)
 	ft_munmap();
 }
 
-void *realloc(void *ptr, size_t size)
+void *ft_realloc(void *ptr, size_t size)
 {
 	t_block *tmp;
 	t_block *tmp2;
@@ -293,7 +307,7 @@ void *realloc(void *ptr, size_t size)
 	return NULL;
 }
 
-void	*malloc(size_t size)
+void	*ft_malloc(size_t size)
 {
 	t_block *tmp;
 	t_block *base;
@@ -312,7 +326,26 @@ void	*malloc(size_t size)
 	if (!base)
 	{
 		add_block(size);
-		base = malloc(size);
+		base = ft_malloc(size);
 	}
 	return (base);
+}
+
+
+int 	main(int ac, char **av)
+{
+	int i;
+
+	i = 0;
+	if(ac == 2)
+	{
+		while (i < 106)
+		{
+			ft_malloc(ft_size(atoi(av[1])));
+			i++;
+		}
+		ft_printtab();
+		printf("taille de la structure ===> %lu + %lu\n", META_SIZE, TINY*100);
+	}
+	return (0);
 }
