@@ -17,6 +17,7 @@
 #include <string.h>
 #include <assert.h>
 #include <sys/mman.h>
+#include "libft/libft.h"
 
 #define TINY_BLOCK  1*4096
 #define TINY  (TINY_BLOCK - sizeof(t_block)) / 100

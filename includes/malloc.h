@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include "../libft/libft.h"
 #include <sys/mman.h>
 
 #define TINY_BLOCK  1*4096
@@ -35,18 +36,13 @@ typedef struct 		s_block {
 	void		    		*ptr;/* le pointeur sur les données, pour le contrôleur d'erreur de free; */
 	int							free[100];/*  indicateur de disponibilité du bloc;*/
 	size_t					size;/* la taille du bloc alloué;*/
-	// int					iteration;/* la taille du bloc alloué;*/
 	struct s_block  *next;/* les pointeurs sur les méta-données des blocs suivants et précédants;*/
 	struct s_block	*prev;
-	/* A pointer to the allocated block */
-	// char				data[1];
-	// /*====================*/
 	size_t       		dontfree;
-	// char          		*str;
 	void 						*tab[100];
 }									t_block;
 
-
+/*variable static globale pour stocker la liste*/
 t_block *lst;
 
 void free(void *ptr);

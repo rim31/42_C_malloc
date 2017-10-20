@@ -1,20 +1,6 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ft_malloc.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: oseng <marvin@42.fr>                       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/07 15:37:51 by oseng             #+#    #+#             */
-/*   Updated: 2017/09/07 15:40:28 by oseng            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "ft_ft_malloc.h"
-#define META_SIZE sizeof(t_block)
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oseng <marvin@42.fr>                       +#+  +:+       +#+        */
@@ -24,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ft_malloc.h"
+#include "./ft_malloc.h"
 #define META_SIZE sizeof(t_block)
 
 void ft_print(void)
@@ -39,6 +25,11 @@ void ft_print(void)
 	}
 }
 
+static void print_mem(t_block tmp)
+{
+			printf("%s", (tmp->free[i]) ? "\e[1;34mX\e[0m" : "\e[1;32m_\e[0m");
+}
+
 void show_alloc_mem()
 {
 	int i;
@@ -47,63 +38,15 @@ void show_alloc_mem()
 	tmp = lst;
 	while(tmp)
 	{
-		printf("\n");
+		printf("%p | %lu\n", tmp, (unsigned long)tmp);
 		i = 0;
 		while(i < 100){
-			printf("%s", (tmp->free[i]) ? "\e[1;34mX\e[0m" : "\e[1;32m_\e[0m");
-			// printf("%s %d | ", (tmp->free[i]) ? "\e[1;32mX\e[0m" : "\e[1;34mF\e[0m", i);
+			// printf("%s", (tmp->free[i]) ? "\e[1;34mX\e[0m" : "\e[1;32m_\e[0m");
+			printf("[%lu]%s %d | ", (unsigned long)tmp->tab[i], (tmp->free[i]) ? "\e[1;32mX\e[0m" : "\e[1;34mF\e[0m", i);
 			i++;
 		}
 		tmp = tmp->next;
 	}
-}
-
-static t_block *add_block_small_init(void)
-{
-	t_block *base;
-	t_block *tmp;
-	int i;
-
-	i = 0;
-	base = NULL;
-	tmp = lst;
-	while(tmp->next)
-		tmp = tmp->next;
-	base = mmap(0, getpagesize() * SMALL_BLOCK, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	base->ptr = base;
-	tmp->next = base;
-	base->size = SMALL;
-	while(i < 100)
-	{
-		base->tab[i] = base + META_SIZE + (SMALL * i);
-		base->free[i] = 0;
-		i++;
-	}
-	base->next = NULL;
-	base->prev = tmp;
-	return (base);
-}
-
-void ft_init(size_t size)
-{
-	int i;
-	t_block *base;
-
-	i = 0;
-	base = mmap(0, getpagesize() * TINY_BLOCK, PROT_READ | PROT_WRITE, MAP_ANON |
-	 MAP_PRIVATE, -1, 0);
-	lst = base;
-	lst->ptr = base;
-	if (size <= TINY)
-		lst->size = TINY;//=======> a changer selon la size
-	while(i < 100)
-	{
-		lst->tab[i] = lst + META_SIZE + (TINY * i);
-		lst->free[i] = 0;//ft_bzero
-		i++;
-	}
-	lst->next = NULL;
-	add_block_small_init();
 }
 
 t_block *add_block(size_t size)
@@ -133,23 +76,6 @@ t_block *add_block(size_t size)
 	base->next = NULL;
 	base->prev = tmp;
 	return (base);
-}
-
-void *find_empty_bloc(t_block *tmp, size_t size)
-{
-	int i;
-
-	i = 0;
-	while(i < 100)
-	{
-		if  (tmp->free[i] == 0 && size <= tmp->size)//mettre tmp->size
-		{
-			tmp->free[i] = size;
-			return(tmp->tab[i]);
-		}
-		i++;
-	}
-	return (NULL);
 }
 
 void *find_empty_bloc_realloc(t_block *tmp, size_t size)
@@ -241,28 +167,6 @@ void ft_free(void *ptr)
 	return;
 }
 
-void ft_free1(void *ptr)
-{
-	t_block *tmp;
-	int i;
-
-	tmp = lst;
-	while(lst && ptr)
-	{
-		i = 0;
-		while (i < 100)
-		{
-			if (ptr == lst->tab[i])
-			{
-				lst->free[i] = 0;
-				// printf(" %lu %d |", (unsigned long)lst->free[i], i);
-			}
-			i++;
-		}
-		lst = lst->next;
-	}
-	ft_munmap();
-}
 
 void *ft_realloc(void *ptr, size_t size)
 {
@@ -307,6 +211,43 @@ void *ft_realloc(void *ptr, size_t size)
 	return NULL;
 }
 
+void ft_init(size_t size)
+{
+	int i;
+	t_block *base;
+
+	i = 0;
+	base = mmap(0, getpagesize() * TINY_BLOCK, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+	lst = base;
+	(void)size;
+	lst->ptr = base;
+	lst->size = TINY;//=======> a changer selon la size
+	while(i < 100)
+	{
+		lst->tab[i] = lst + META_SIZE + (TINY * i);
+		lst->free[i] = 0;//ft_bzero
+		i++;
+	}
+	lst->next = NULL;
+}
+
+void *find_empty_bloc(t_block *tmp, size_t size)
+{
+	int i;
+
+	i = 0;
+	while(i < 100)
+	{
+		if  (tmp->free[i] == 0 && size <= tmp->size)//mettre tmp->size
+		{
+			tmp->free[i] = size;
+			return(tmp->tab[i]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 void	*ft_malloc(size_t size)
 {
 	t_block *tmp;
@@ -335,16 +276,19 @@ void	*ft_malloc(size_t size)
 int 	main(int ac, char **av)
 {
 	int i;
+	void *ptr;
 
 	i = 0;
 	if(ac == 2)
 	{
 		while (i < 106)
 		{
-			ft_malloc(ft_size(atoi(av[1])));
+			ptr = ft_malloc(atoi(av[1]));
+			print_mem(ptr);
 			i++;
 		}
-		ft_printtab();
+		show_alloc_mem();
+		// ft_putnbr_base((long long)ptr, 16);
 		printf("taille de la structure ===> %lu + %lu\n", META_SIZE, TINY*100);
 	}
 	return (0);

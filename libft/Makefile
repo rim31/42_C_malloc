@@ -27,7 +27,7 @@ SRCS = 	ft_memset.c ft_strmap.c ft_putchar.c ft_strmapi.c ft_putchar_fd.c \
 		ft_strlcat.c ft_memmove.c ft_strlen.c ft_strnequ.c ft_isblank.c \
 		ft_toupper.c ft_sort_tab.c ft_isprime.c ft_lstadd.c ft_lstaddend.c \
 		ft_lstdel.c ft_lstdelone.c ft_lstiter.c ft_lstmap.c ft_lstnew.c \
-		ft_islower.c ft_isupper.c get_next_line.c ft_itoa_base.c\
+		ft_islower.c ft_isupper.c get_next_line.c ft_itoa_base.c ft_putnbr_base.c\
 
 INCLUDE = libft.h
 

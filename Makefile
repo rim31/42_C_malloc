@@ -14,7 +14,7 @@ CC		= gcc
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@echo "\033[96m                  by e🏀 zdek\033[97m         "
+	@echo "\033[96m                  by 🏀 seng\033[97m         "
 	@echo "\033[91mCompiling 😇\033[97m"
 		@make -C libft
 		#@$(CC) $(FLAGS) $(SRCS) -o $(NAME) $(INC) $(LIB)

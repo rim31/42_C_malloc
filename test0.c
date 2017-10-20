@@ -10,5 +10,7 @@ int main()
   {
     i++;
   }
+  // ft_putnbr_base((long long)malloc(1), 16);
+  printf("%lu", (unsigned long)malloc(1));
   return (0);
 }
