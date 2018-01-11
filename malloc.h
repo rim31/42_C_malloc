@@ -17,21 +17,30 @@
 #include <unistd.h>
 #include <stdio.h>
 
-typedef struct      s_header
+typedef struct          s_header
 {
-    size_t          size;
-    size_t          total_size;
-    struct s_header   *next;
-    struct s_header   *next_area;
-    int             type;
-    int             free;
-    char            header_end[0];
-}                   t_header;
+    size_t              size;
+    size_t              total_size;
+    struct s_header     *next;
+    struct s_header     *next_area;
+    int                 type;
+    int                 free;
+}                       t_header;
 
 /*
-**  Global variables.
+**    structure pour stocker toutes les structures
 */
-t_header               *g_base;
+typedef struct          t_env
+{
+                        s_zone      *small;
+                        s_zone      *tiny;
+                        s_zone      *large;
+}                       s_env;
+/*
+**    Global variables.
+*/
+t_header                *g_base;
+t_env                   global_env;
 
 void free(void *ptr);
 void *malloc(size_t size);
