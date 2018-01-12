@@ -54,3 +54,22 @@ void			ft_putnbr(int n)
 			ft_putchar('0' + n);
 	}
 }
+
+
+void		ft_puthexa(size_t ptr)
+{
+	size_t	i;
+
+	i = 0;
+	if (ptr)
+	{
+		i = ptr / 16;
+		ft_puthexa(i);
+		if (ptr % 16 < 10)
+			ft_putchar('0' + ptr % 16);
+		else
+			ft_putchar('a' + (ptr % 16) - 10);
+	}
+	else
+		ft_putstr("0x" );
+}

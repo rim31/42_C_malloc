@@ -16,16 +16,21 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <stdio.h>
+#define TINY      128//(128+24)*100/4096 = 3.71 ==> 4 getpagesize
+#define SMALL     1024
+#define LARGE     1
+#define TRUE      1
+#define FALSE      0
 
 typedef struct          s_header
 {
     size_t              size;
     int                 free;
     struct s_header     *next;
-
-    size_t              total_size;
-    struct s_header     *next_area;
-    int                 type;
+//=================================
+    // size_t              total_size;
+    // struct s_header     *next_area;
+    // int                 type;
 }                       t_header;
 
 /*
@@ -47,17 +52,18 @@ typedef struct          s_env
 /*
 **    Global variables.
 */
-t_header                *g_base;
-t_env                   *global_env;
+// t_header                *g_base;
+t_env                   global_env;
 
-void free(void *ptr);
-void *malloc(size_t size);
-void *ft_realloc(void *ptr, size_t size);
-void ft_show_alloc_mem(void);
-void ft_putchar(char c);
-void ft_putnbr(int n);
-size_t ft_strlen(const char *s);
-void ft_putstr(char const *str);
+void                    free(void *ptr);
+void                    *malloc(size_t size);
+void                    *ft_realloc(void *ptr, size_t size);
+void                    ft_show_alloc_mem(void);
+void                    ft_putchar(char c);
+void                    ft_putnbr(int n);
+size_t                  ft_strlen(const char *s);
+void                    ft_putstr(char const *str);
+void	                  ft_puthexa(size_t ptr);
 
 
 #endif
