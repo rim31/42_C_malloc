@@ -17,13 +17,28 @@ int			init(size_t size)
 	int		ok;
 
 	ok = TRUE;
-	if (size < TINY && !global_env.tiny)
+	if (size <= TINY && !global_env.tiny)
 	{
 		if (!(global_env.tiny = mmap(0, getpagesize() * (4), PROT_READ | PROT_WRITE, MAP_ANON |
 		MAP_PRIVATE, -1, 0)))
 			return (FALSE);
 		ft_putstr("init Tiny\n");
+		init_tiny_header(global_env.tiny);
 	}
+	// else if (size <= SMALL && !global_env.small)
+	// {
+	// 	if (!(global_env.small = mmap(0, getpagesize() * (26), PROT_READ | PROT_WRITE, MAP_ANON |
+	// 	MAP_PRIVATE, -1, 0)))
+	// 		return (FALSE);
+	// 	ft_putstr("init Small\n");
+	// }
+	// else if (!global_env.large)
+	// {
+	// 	if (!(global_env.large = mmap(0, getpagesize() * (size), PROT_READ | PROT_WRITE, MAP_ANON |
+	// 	MAP_PRIVATE, -1, 0)))
+	// 		return (FALSE);
+	// 	ft_putstr("init large\n");
+	// }
 	return (ok);
 }
 
@@ -41,14 +56,12 @@ void			*malloc(size_t size)
 	// 	return (malloc_large(size));
 	if (!init(size))
 		return (NULL);
-	else
-	{
-		ft_puthexa((unsigned long)global_env.tiny);	
-	}
-
-	// ft_putnbr(TINY);
+	find_empty_bloc(size);
+	//===========
+	// print_list((t_header*)global_env.tiny);
+	//===========
 	ft_putstr("my malloc \n");
-	ft_putnbr(sizeof(struct s_header));
+
 	base = mmap(0, getpagesize() * 2, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
 	return (base);
 }

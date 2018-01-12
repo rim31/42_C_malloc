@@ -16,21 +16,25 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <stdio.h>
-#define TINY      128//(128+24)*100/4096 = 3.71 ==> 4 getpagesize
-#define SMALL     1024
-#define LARGE     1
-#define TRUE      1
-#define FALSE      0
+#define TINY            128//(128+24)*100/4096 = 3.71 ==> 4 getpagesize
+#define SMALL           1024
+#define LARGE           1
+#define TRUE            1
+#define FALSE           0
+#define META_SIZE_HEAD  sizeof(struct s_header)
+
 
 typedef struct          s_header
 {
     size_t              size;
     int                 free;
     struct s_header     *next;
-//=================================
-    // size_t              total_size;
-    // struct s_header     *next_area;
-    // int                 type;
+/*
+** =================================
+**    // size_t              total_size;
+**    // struct s_header     *next_area;
+**    // int                 type;
+*/
 }                       t_header;
 
 /*
@@ -45,14 +49,14 @@ typedef struct          s_zone{
 
 typedef struct          s_env
 {
-      t_zone            *small;
       t_zone            *tiny;
+      t_zone            *small;
       t_zone            *large;
 }                       t_env;
 /*
 **    Global variables.
+** t_header                *g_base;
 */
-// t_header                *g_base;
 t_env                   global_env;
 
 void                    free(void *ptr);
@@ -64,6 +68,9 @@ void                    ft_putnbr(int n);
 size_t                  ft_strlen(const char *s);
 void                    ft_putstr(char const *str);
 void	                  ft_puthexa(size_t ptr);
+void                    print_list(t_header *liste);
+t_header                *init_tiny_header(t_zone *ptr);
+void                    *find_empty_bloc(size_t size);
 
 
 #endif

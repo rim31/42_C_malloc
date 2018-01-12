@@ -73,3 +73,20 @@ void		ft_puthexa(size_t ptr)
 	else
 		ft_putstr("0x" );
 }
+
+void 		print_list(t_header *liste)
+{
+	int  i;
+
+	i = 1;
+  	while(liste)
+  	{
+		ft_putstr("[");
+		ft_putnbr(i);
+		ft_putstr("]");
+	  	ft_puthexa((unsigned long)liste);
+	  	ft_putstr("|");
+	  	liste = liste->next;
+		i++;
+  	}
+}
