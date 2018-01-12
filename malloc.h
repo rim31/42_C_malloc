@@ -70,7 +70,7 @@ void                    ft_putstr(char const *str);
 void	                  ft_puthexa(size_t ptr);
 void                    print_list(t_header *liste);
 t_header                *init_tiny_header(t_zone *ptr);
-void                    *find_empty_bloc(size_t size);
+t_header                *find_empty_bloc(size_t size);
 
 
 #endif

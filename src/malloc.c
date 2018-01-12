@@ -48,18 +48,17 @@ void			*malloc(size_t size)
 	t_header	*current_head;
 	void 		*base;
 
-	(void)current_head;
 	(void)current_zone;
 	if (!size)
 		return (NULL);
-	// if (size > SMALL)
-	// 	return (malloc_large(size));
 	if (!init(size))
 		return (NULL);
-	find_empty_bloc(size);
+	current_head = find_empty_bloc(size);
 	//===========
-	// print_list((t_header*)global_env.tiny);
+	print_list((t_header*)global_env.tiny);
 	//===========
+	ft_putstr("GROS NULL ");
+	return (NULL);
 	ft_putstr("my malloc \n");
 
 	base = mmap(0, getpagesize() * 2, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);

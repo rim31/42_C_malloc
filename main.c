@@ -15,7 +15,8 @@
 int main (int ac, char **av) {
 
   int *m;
-  m = malloc(sizeof(int));
+  // m = malloc(sizeof(int));
+  m = malloc(42);
 
   *m = 10;
 
