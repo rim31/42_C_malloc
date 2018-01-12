@@ -10,13 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "ft_malloc.h"
+#include "malloc.h"
 
+int main (int ac, char **av) {
 
-int main(int ac, char **av){
+  int *m;
+  m = malloc(sizeof(int));
 
-  int* m = NULL;
+  *m = 10;
 
-
-
+  return 0;
 }
