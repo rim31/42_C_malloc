@@ -15,7 +15,7 @@ ifeq ($(HOSTTYPE),)
 endif
 
 NAME	= libft_malloc_$(HOSTTYPE).so
-FILES	= malloc.c
+FILES	= malloc.c ft_ft.c
 SRCS	= $(addprefix src/, $(FILES))
 OBJS	= $(SRCS:src/%.c=.obj/%.o)
 INC	= -I include -I .

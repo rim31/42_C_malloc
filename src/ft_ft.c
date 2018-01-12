@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.c                                           :+:      :+:    :+:   */
+/*   ft_ft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oseng <oseng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,29 +12,45 @@
 
 #include "malloc.h"
 
-void 			*malloc(size_t size){
+size_t		ft_strlen(const char *s)
+{
+	size_t	i;
 
-//  t_header h;
-
-	(void)size;
-	ft_putstr("my ma lloc \n");
-	ft_putnbr(sizeof(struct s_header));
-	void *base;
-
-	base = mmap(0, getpagesize() * 2, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	return base;
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
-void 			free(void *ptr){
-	(void)ptr;
+void			ft_putchar(char c)
+{
+	write(1, &c, 1);
 }
 
-void 			*realloc(void *ptr, size_t size){
-	(void)ptr;
-	(void)size;
-	return ptr;
+void			ft_putstr(char const *str)
+{
+	if (!str)
+		return ;
+	write(1, str, ft_strlen(str));
 }
 
-void 			show_alloc_mem(){
-	return ;
+void			ft_putnbr(int n)
+{
+	if (n == -2147483648)
+		ft_putstr("-2147483648");
+	else
+	{
+		if (n < 0)
+		{
+			ft_putchar('-');
+			n = -n;
+		}
+		if (n > 9)
+		{
+			ft_putnbr(n / 10);
+			ft_putnbr(n % 10);
+		}
+		else
+			ft_putchar('0' + n);
+	}
 }
