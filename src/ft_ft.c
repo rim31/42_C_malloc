@@ -79,6 +79,7 @@ void 		print_list(t_header *liste)
 	int  i;
 
 	i = 1;
+	ft_putstr("print_list");
   	while(liste)
   	{
 		ft_putstr("[");

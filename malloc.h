@@ -22,6 +22,7 @@
 #define TRUE            1
 #define FALSE           0
 #define META_SIZE_HEAD  sizeof(struct s_header)
+#define META_SIZE_ZONE  sizeof(struct s_zone)
 
 
 typedef struct          s_header
@@ -71,6 +72,8 @@ void	                  ft_puthexa(size_t ptr);
 void                    print_list(t_header *liste);
 t_header                *init_tiny_header(t_zone *ptr);
 t_header                *find_empty_bloc(size_t size);
+
+t_zone                  *create_new_tiny(size_t size);
 
 
 #endif

@@ -54,6 +54,9 @@ void			*malloc(size_t size)
 	if (!init(size))
 		return (NULL);
 	current_head = find_empty_bloc(size);
+
+	if (current_head == NULL)
+		create_new_tiny(size);// ! il faut recuperer le pointeur
 	//===========
 	print_list((t_header*)global_env.tiny);
 	//===========
