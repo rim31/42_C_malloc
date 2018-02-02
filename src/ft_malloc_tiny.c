@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                        :+:      :+:    :+:   */
+/*   ft_malloc_tiny.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oseng <oseng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "malloc.h"
 
-t_header		*init_tiny_header(t_zone *ptr)
+t_header		*init_header_tiny(t_zone *ptr)
 {
 	int		i;
 	t_header 	*tmp;
@@ -40,7 +40,7 @@ t_header		*init_tiny_header(t_zone *ptr)
 	return (tmp);
 }
 
-t_header          *find_empty_bloc(size_t size)
+t_header          *find_empty_bloc_tiny(size_t size)//accomode avec la SIZE 
 {
       t_zone      *tiny_zone;
       t_header    *tmp;
@@ -49,31 +49,52 @@ t_header          *find_empty_bloc(size_t size)
       ft_puthexa((unsigned long)tiny_zone);
       if (size <= TINY)
       {
-		// ft_putstr(" FCT : find_empty_tiny_bloc\n");
-		// print_list_header(global_env.tiny->header);
             while(tiny_zone)
             {
-                  // ft_puthexa((unsigned long)tiny_zone);
-                  tmp = global_env.tiny->header;
-                  // ft_puthexa((unsigned long)tmp);
-                  while(tmp)//on itere 106x plutot aue 100 car il reste de la place dans la memoire 4* 4096 / 152
-                  {
-				// ft_puthexa((unsigned long)tmp);
-                        if (tmp->free == TRUE)
+				tmp = global_env.tiny->header;
+				while(tmp)//on itere 103x plutot aue 100 car il reste de la place dans la memoire 4* 4096 / 152
 				{
-					// ft_putstr("Find empty bloc  !!!: \n");
+					// ft_putstr(" ");
 					// ft_puthexa((unsigned long)tmp);
-					// ft_putstr("________ \n");
-                              return (tmp);
+					// ft_putstr("    ");
+					// ft_putnbr(tmp->free);
+					// ft_putstr("    ");
+					// ft_putnbr(tmp->size);
+					// ft_putstr("\n");
+						if (tmp->free == TRUE)
+					return (tmp);
+					tmp = tmp->next;
 				}
-                        tmp = tmp->next;
-                  }
-                  tiny_zone = tiny_zone->next ;
+
+				tiny_zone = tiny_zone->next ;
             }
       }
+	ft_putstr("NULL !!!!\n");
       return (NULL);///PENSER A RETOURNER le POINTEUR + 28(pour pas ecraser le header)
 }
 
+t_header          *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size)
+{
+    t_header    *tmp;
+
+    while(zone)
+    {
+        tmp = zone->header;
+        while(tmp)//on itere 103x plutot aue 100 car il reste de la place dans la memoire 4* 4096 / 152
+        {
+            if (tmp->free == TRUE && size <= nb_size)
+            {
+                tmp->free = FALSE;
+				tmp->size = size;
+            	ft_putstr("==> free done !!!!\n");
+                return (tmp);
+            }
+            tmp = tmp->next;
+        }
+        zone = zone->next ;
+    }
+	return (NULL);
+}
 
 t_zone		*create_new_tiny(size_t size)
 {
@@ -99,7 +120,7 @@ t_zone		*create_new_tiny(size_t size)
 	ft_putstr(" >-\n");
 	ft_putstr("Joined new Tiny\n");
 
-	init_tiny_header(new_tiny);
+	init_header_tiny(new_tiny);
 
 	ft_putstr("new tiny created\n");
 	return (new_tiny);

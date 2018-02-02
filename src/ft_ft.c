@@ -79,19 +79,18 @@ void 		print_list_header(t_header *liste)
 	int  i;
 
 	i = 1;
-	ft_putstr("print_list_head : ");
+	ft_putstr("\nprint_list_head : \n");
+	ft_putstr("i adress         free    size\n");
   	while(liste && i <= 100)
   	{
-		ft_putstr("[");
 		ft_putnbr(i);
 		ft_putstr(" ");
-		if (liste->free)
-			ft_putnbr(liste->size);
-		else
-			ft_putstr(".");
-		ft_putstr("]");
-	  	// ft_puthexa((unsigned long)liste);
-	  	ft_putstr("|");
+	  	ft_puthexa((unsigned long)liste);
+	  	ft_putstr("    ");
+		ft_putnbr(liste->free);
+	  	ft_putstr("    ");
+		ft_putnbr(liste->size);
+	  	ft_putstr("\n");
 	  	liste = liste->next;
 		i++;
   	}
@@ -118,11 +117,14 @@ void 		print_list_zone(t_zone *liste)
 
 void			print_all(void)
 {
-	// int i;
+	int i = 0;
 	// t_header	*tmp;
 	t_zone		*tiny_zone;
 
 	tiny_zone = global_env.tiny;
+	ft_putstr("\n ==");
+	ft_putnbr(i);
+	ft_putstr("== | \n");
 	print_list_zone( global_env.tiny);
 	// while(tiny_zone)
 	// {

@@ -8,3 +8,7 @@ creation du malloc init
 106 tiny
 
 create new tiny segfault due to ->next = NULL doesn't work
+
+
+=============
+entrain de faire realloc

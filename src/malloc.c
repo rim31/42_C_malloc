@@ -23,19 +23,27 @@ int			init(size_t size)
 		MAP_PRIVATE, -1, 0)))
 			return (FALSE);
 		ft_putstr("init Tiny\n");
-		init_tiny_header(global_env.tiny);
+		init_header_tiny(global_env.tiny);
+	}
+	if (size <= SMALL && !global_env.small)
+	{
+		if (!(global_env.small = mmap(0, getpagesize() * (26), PROT_READ | PROT_WRITE, MAP_ANON |
+		MAP_PRIVATE, -1, 0)))
+			return (FALSE);
+		ft_putstr("init small\n");
+		init_header_small(global_env.small);
 	}
 	return (ok);
 }
 
 void			*malloc(size_t size)
 {
-	// ft_putnbr(size);
-	ft_putstr("\ngo malloc \n\n");
+	ft_putnbr(size);
+	ft_putstr(" go malloc \n\n");
 	t_header	*current_head;
 	void 		*base;
 
-	print_all();
+	// print_all();
 	ft_puthexa((unsigned long)global_env.tiny);
 	ft_putstr("\n");
 	current_head = NULL;
@@ -43,19 +51,32 @@ void			*malloc(size_t size)
 		return (NULL);
 	if (!init(size))
 		return (NULL);
-	current_head = find_empty_bloc(size);
+	if (size <= TINY)
+		current_head = find_empty_bloc(size, global_env.tiny, TINY);
+	else if (size <= SMALL)
+		current_head = find_empty_bloc(size, global_env.small, SMALL);
+	else
+		current_head = find_empty_bloc(size, global_env.large, LARGE);
+		// current_head = find_empty_bloc_tiny(size);
+		// current_head = find_empty_bloc_small(size);
 	if (current_head)
 	{
 		current_head->free = FALSE;
 		current_head->size = size;
 		return current_head + META_SIZE_HEAD;
 	}
-	// else if (current_head == NULL)
-	// 	create_new_tiny(size);// ! il faut recuperer le pointeur
+	else if (current_head == NULL)
+		// ft_putstr("MALLOC pas TROUVE\n");
+		create_new_tiny(size);// ! il faut recuperer le pointeur
 	//===========
-	print_all();
+	// print_all();
 	//===========
-	ft_putstr("GROS NULL ");
+	ft_putstr("\n\n ===============\n\n ");
+	ft_puthexa((unsigned long)global_env.tiny);
+	ft_putstr("\n ");
+	ft_puthexa((unsigned long)global_env.small);
+
+	ft_putstr("\nGROS NULL ");
 	return (NULL);
 	ft_putstr("my malloc \n");
 
@@ -63,15 +84,11 @@ void			*malloc(size_t size)
 	return (base);
 }
 
-void			free(void *ptr)
-{
-	(void)ptr;
-}
-
 void			*realloc(void *ptr, size_t size)
 {
 	(void)ptr;
 	(void)size;
+	ft_putstr("REALLOC\n");
 	return (ptr);
 }
 
