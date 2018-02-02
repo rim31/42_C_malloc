@@ -25,17 +25,17 @@
 #define META_SIZE_ZONE  sizeof(struct s_zone)
 
 
+/*
+** ============ + s_header =================
+**    // size_t              total_size;
+**    // struct s_header     *next_area;
+**    // int                 type;
+*/
 typedef struct          s_header
 {
     size_t              size;
     int                 free;
     struct s_header     *next;
-/*
-** =================================
-**    // size_t              total_size;
-**    // struct s_header     *next_area;
-**    // int                 type;
-*/
 }                       t_header;
 
 /*
@@ -69,7 +69,9 @@ void                    ft_putnbr(int n);
 size_t                  ft_strlen(const char *s);
 void                    ft_putstr(char const *str);
 void	                  ft_puthexa(size_t ptr);
-void                    print_list(t_header *liste);
+void                    print_list_header(t_header *liste);
+void                    print_list_zone(t_zone *liste);
+void                    print_all(void);
 t_header                *init_tiny_header(t_zone *ptr);
 t_header                *find_empty_bloc(size_t size);
 

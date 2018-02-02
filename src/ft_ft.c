@@ -74,20 +74,66 @@ void		ft_puthexa(size_t ptr)
 		ft_putstr("0x" );
 }
 
-void 		print_list(t_header *liste)
+void 		print_list_header(t_header *liste)
 {
 	int  i;
 
 	i = 1;
-	ft_putstr("print_list");
-  	while(liste)
+	ft_putstr("print_list_head : ");
+  	while(liste && i <= 100)
   	{
 		ft_putstr("[");
 		ft_putnbr(i);
+		ft_putstr(" ");
+		if (liste->free)
+			ft_putnbr(liste->size);
+		else
+			ft_putstr(".");
 		ft_putstr("]");
-	  	ft_puthexa((unsigned long)liste);
+	  	// ft_puthexa((unsigned long)liste);
 	  	ft_putstr("|");
 	  	liste = liste->next;
 		i++;
   	}
+}
+
+void 		print_list_zone(t_zone *liste)
+{
+	int  i;
+
+	i = 1;
+	ft_putstr("print_list_zone : ");
+  	while(liste)
+  	{
+		ft_putstr("{");
+		ft_putnbr(i);
+	  	ft_puthexa((unsigned long)liste);
+	  	ft_putstr("} | \n");
+		print_list_header(liste->header);
+	  	liste = liste->next;
+		i++;
+  	}
+}
+
+
+void			print_all(void)
+{
+	// int i;
+	// t_header	*tmp;
+	t_zone		*tiny_zone;
+
+	tiny_zone = global_env.tiny;
+	print_list_zone( global_env.tiny);
+	// while(tiny_zone)
+	// {
+	// 	i = 1;
+	// 	ft_putstr(" < ");
+	// 	ft_puthexa((unsigned long)tiny_zone);
+	// 	ft_putstr(" > \n");
+	// 	tmp = (t_header*)tiny_zone->header;
+	// 	print_list_header(tmp);
+	// 	tiny_zone = tiny_zone->next ;
+	// 	// ft_puthexa((unsigned long)tiny_zone);
+	// }
+	ft_puthexa((unsigned long)tiny_zone);
 }
