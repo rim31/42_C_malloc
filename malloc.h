@@ -77,11 +77,13 @@ t_header                *init_header_tiny(t_zone *ptr);
 t_header                *init_header_small(t_zone *ptr);
 t_header                *find_empty_bloc_tiny(size_t size);
 t_header                *find_empty_bloc_small(size_t size);
-t_zone                  *create_new_tiny(size_t size);
-t_zone                  *create_new_small(size_t size);
+t_header                *create_new_tiny(size_t size);
+t_header                *create_new_small(size_t size);
 t_header                *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size);
 void                    *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size);
 void	                  *ft_memccpy(void *dest, const void *src, int c, size_t n);
+void                    *ft_memory_copy(void *src, void *dest);
+
 
 
 

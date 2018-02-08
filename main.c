@@ -11,9 +11,10 @@
 /* ************************************************************************** */
 
 #include "malloc.h"
+#include <stdlib.h>
 
 int main (int ac, char **av) {
-
+  puts("coucou");
   int *m;
   // m = malloc(sizeof(int));
   m = malloc(42);

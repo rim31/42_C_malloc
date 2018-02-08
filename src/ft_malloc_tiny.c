@@ -28,7 +28,7 @@ t_header		*init_header_tiny(t_zone *ptr)
 	ft_putstr(" init_tiny_header\n");
 	while(i <= 100)//on itere 106x plutot aue 100 car il reste de la place dans la memoire 4* 4096 / 152
 	{
-		tmp->free = TRUE;
+		tmp->free = 1;
 		tmp->size = 0;
 		i++;
 		tmp->next = (void*)tmp + META_SIZE_HEAD + TINY;// attention au dernier
@@ -37,7 +37,7 @@ t_header		*init_header_tiny(t_zone *ptr)
 	tmp->next = NULL;
 	ft_puthexa((unsigned long)tmp);
 	ft_putstr("\n\n");
-	return (tmp);
+	return ((void*)ptr->header + META_SIZE_HEAD + TINY);
 }
 
 t_header          *find_empty_bloc_tiny(size_t size)//accomode avec la SIZE 
@@ -52,7 +52,7 @@ t_header          *find_empty_bloc_tiny(size_t size)//accomode avec la SIZE
             while(tiny_zone)
             {
 				tmp = global_env.tiny->header;
-				while(tmp)//on itere 103x plutot aue 100 car il reste de la place dans la memoire 4* 4096 / 152
+				while(tmp)// 4* 4096 / 152
 				{
 					// ft_putstr(" ");
 					// ft_puthexa((unsigned long)tmp);
@@ -61,7 +61,7 @@ t_header          *find_empty_bloc_tiny(size_t size)//accomode avec la SIZE
 					// ft_putstr("    ");
 					// ft_putnbr(tmp->size);
 					// ft_putstr("\n");
-						if (tmp->free == TRUE)
+						if (tmp->free == 1)
 					return (tmp);
 					tmp = tmp->next;
 				}
@@ -79,12 +79,17 @@ t_header          *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size)
 
     while(zone)
     {
-        tmp = zone->header;
-        while(tmp)//on itere 103x plutot aue 100 car il reste de la place dans la memoire 4* 4096 / 152
+        if (zone->header)
+		{
+			tmp = zone->header;
+			ft_puthexa((unsigned long)tmp);
+		}
+        while(tmp)//!!
         {
-            if (tmp->free == TRUE && size <= nb_size)
+			ft_putnbr(tmp->free);
+            if (tmp->free && size <= nb_size)
             {
-                tmp->free = FALSE;
+                tmp->free = 0;
 				tmp->size = size;
             	ft_putstr("==> free done !!!!\n");
                 return (tmp);
@@ -96,12 +101,12 @@ t_header          *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size)
 	return (NULL);
 }
 
-t_zone		*create_new_tiny(size_t size)
+t_header			*create_new_tiny(size_t size)
 {
-	t_zone 	*tiny_zone;
-	t_zone 	*new_tiny;
-	// t_header 	*tmp;
-	int 		i;
+	t_zone 		*tiny_zone;
+	t_zone 		*new_tiny;
+	t_header 	*tmp;
+	int 	i;
 
 	i = 0;
 	if (size <= TINY)
@@ -120,8 +125,8 @@ t_zone		*create_new_tiny(size_t size)
 	ft_putstr(" >-\n");
 	ft_putstr("Joined new Tiny\n");
 
-	init_header_tiny(new_tiny);
+	tmp = init_header_tiny(new_tiny);
 
 	ft_putstr("new tiny created\n");
-	return (new_tiny);
+	return (tmp);
 }

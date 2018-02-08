@@ -80,7 +80,7 @@ void 		print_list_header(t_header *liste)
 
 	i = 1;
 	ft_putstr("\nprint_list_head : \n");
-	ft_putstr("i adress         free    size\n");
+	ft_putstr("i adress       free  size\n");
   	while(liste && i <= 100)
   	{
 		ft_putnbr(i);

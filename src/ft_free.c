@@ -26,7 +26,7 @@ void			free_zone(void *ptr, t_zone *zone)
         {
             if ((void*)tmp == ptr)
             {
-                tmp->free = TRUE;
+                tmp->free = 1;
                 tmp->size = 0;
             	ft_putstr("==> free done !!!!\n");
                 free_mem = 1;
@@ -68,7 +68,7 @@ void          *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size)
         {
             if (tmp == ptr && size <= nb_size)
             {
-                tmp->free = FALSE;
+                tmp->free = 0;
 				tmp->size = size;
             	ft_putstr("==> realloc done !!!!\n");
                 return (void*)ptr;
@@ -94,4 +94,30 @@ void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
 		i++;
 	}
 	return (NULL);
+}
+
+
+void    *ft_memory_copy(void *src, void *dest)
+{
+    size_t			i;
+    unsigned char	*s1;
+    unsigned char	*s2;
+    t_header  *h_src;
+    t_header  *h_dest;
+
+    h_src = src - META_SIZE_HEAD;
+    h_dest = dest - META_SIZE_HEAD;
+        i = 0;
+        s1 = (unsigned char *)dest;
+        s2 = (unsigned char *)src;
+        while (i < h_src->size)
+        {
+            s1[i] = s2[i];
+            i++;
+        }
+    h_dest->free = 0;
+    h_dest->size = h_src->size;
+    h_src->free = 1;
+    h_src->size = 0;
+	return (dest);
 }

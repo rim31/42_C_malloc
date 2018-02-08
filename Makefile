@@ -28,12 +28,12 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	@echo "\033[96m by 🏀 seng\033[97m"
 	@echo "\033[91mCompiling 😇\033[97m"
-	@$(CC) -shared -o $(NAME) $(OBJS)
+	@$(CC) -g -shared -o $(NAME) $(OBJS)
 	@ln -s $(NAME) libft_malloc.so
 	@echo "\033[90mDone 😎\033[97m"
 .obj/%.o: src/%.c
 	mkdir -p .obj
-	@$(CC) -c $< -o $@ $(FLAGS) $(INC)
+	@$(CC) -g -c $< -o $@ $(FLAGS) $(INC)
 
 clean:
 	@echo "\033[92mDeleting 💀\033[97m"
