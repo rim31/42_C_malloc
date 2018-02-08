@@ -52,9 +52,11 @@ void			*malloc(size_t size)
 	if (!init(size))
 		return (NULL);
 	if (size <= TINY)
-		current_head = find_empty_bloc(size, global_env.tiny, TINY);
+		// current_head = find_empty_bloc(size, global_env.tiny, TINY);
+		current_head = find_empty_bloc_tiny(size);
 	else if (size <= SMALL)
-		current_head = find_empty_bloc(size, global_env.small, SMALL);
+		// current_head = find_empty_bloc(size, global_env.small, SMALL);
+		current_head = find_empty_bloc_small(size);
 	else
 		current_head = find_empty_bloc(size, global_env.large, LARGE);
 	if (current_head)

@@ -82,9 +82,11 @@ t_header          *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size)
         if (zone->header)
 		{
 			tmp = zone->header;
+			ft_putstr("\n_____vvvv_____\n");
 			ft_puthexa((unsigned long)tmp);
+			ft_putstr("\n_____^^^^_____\n");
 		}
-        while(tmp)//!!
+        while(tmp)//!! 
         {
 			ft_putnbr(tmp->free);
             if (tmp->free && size <= nb_size)

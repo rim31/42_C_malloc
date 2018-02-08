@@ -15,11 +15,13 @@
 
 int main (int ac, char **av) {
   puts("coucou");
-  int *m;
+  char *m;
   // m = malloc(sizeof(int));
+  puts("coucou");
   m = malloc(42);
 
-  *m = 10;
+  m = "lol";
 
+  puts(m);
   return 0;
 }
