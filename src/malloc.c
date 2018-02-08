@@ -22,7 +22,7 @@ int			init(size_t size)
 		if (!(global_env.tiny = mmap(0, getpagesize() * (4), PROT_READ | PROT_WRITE, MAP_ANON |
 		MAP_PRIVATE, -1, 0)))
 			return (FALSE);
-		ft_putstr("init Tiny\n");
+		// ft_putstr("init Tiny\n");
 		init_header_tiny(global_env.tiny);
 	}
 	if (size <= SMALL && !global_env.small)
@@ -30,7 +30,7 @@ int			init(size_t size)
 		if (!(global_env.small = mmap(0, getpagesize() * (26), PROT_READ | PROT_WRITE, MAP_ANON |
 		MAP_PRIVATE, -1, 0)))
 			return (FALSE);
-		ft_putstr("init small\n");
+		// ft_putstr("init small\n");
 		init_header_small(global_env.small);
 	}
 	return (ok);
@@ -38,14 +38,14 @@ int			init(size_t size)
 
 void			*malloc(size_t size)
 {
-	ft_putnbr(size);
-	ft_putstr(" go malloc \n\n");
+	// ft_putnbr(size);
+	// ft_putstr(" go malloc \n\n");
 	t_header	*current_head;
 	void 		*base;
 
 	// print_all();
-	ft_puthexa((unsigned long)global_env.tiny);
-	ft_putstr("\n");
+	// ft_puthexa((unsigned long)global_env.tiny);
+	// ft_putstr("\n");
 	current_head = NULL;
 	if (!size)
 		return (NULL);
@@ -68,16 +68,16 @@ void			*malloc(size_t size)
 	else
 	{// ft_putstr("MALLOC pas TROUVE\n");
 		base =  create_new_tiny(size);// ! il faut recuperer le pointeur
-		ft_putstr("\n\n ===============\n\n ");
-		ft_puthexa((unsigned long)base);
-		ft_putstr("\n\n ===============\n\n ");
+		// ft_putstr("\n\n ===============\n\n ");
+		// ft_puthexa((unsigned long)base);
+		// ft_putstr("\n\n ===============\n\n ");
 		return base;
 	}
 	//===========
-	print_all();
+	// print_all();
 	//===========
 
-	ft_putstr("\nFIN MALLOC ");
+	// ft_putstr("\nFIN MALLOC ");
 	return (NULL);
 }
 

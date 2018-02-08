@@ -11,17 +11,31 @@
 /* ************************************************************************** */
 
 #include "malloc.h"
-#include <stdlib.h>
+// #include <stdlib.h>
 
-int main (int ac, char **av) {
-  puts("coucou");
-  char *m;
-  // m = malloc(sizeof(int));
-  puts("coucou");
-  m = malloc(42);
+// int main (int ac, char **av) {
+//   puts("coucou");
+//   char *m;
+//   // m = malloc(sizeof(int));
+//   puts("coucou");
+//   m = malloc(42);
 
-  m = "lol";
+//   m = "lol";
 
-  puts(m);
-  return 0;
+//   puts(m);
+//   return 0;
+// }
+
+
+int main()
+{
+  int i;
+  char *addr;
+
+  i = 0;
+  while (i < 1024)
+  {
+    i++;
+  }
+  return (0);
 }

@@ -11,6 +11,16 @@ create new tiny segfault due to ->next = NULL doesn't work
 
 
 =============
-free erreur car il faut rajouter + META_DATA_
+debug : compiler le makefile avec -g
+lldb ./a.out
 
-entrain de faire realloc
+env DYLD_LIBRARY_PATH=.
+env DYLD_INSERT_LIBRARIES="libft_malloc.so"
+env DYLD_FORCE_FLAT_NAMESPACE=1
+disas
+r
+
+=============
+
+Large a faire
+

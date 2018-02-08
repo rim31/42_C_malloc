@@ -21,14 +21,14 @@ void			free_zone(void *ptr, t_zone *zone)
     free_mem = 0;
     while(zone)
     {
-        tmp = (void*)zone->header+ META_SIZE_ZONE;
+        tmp = (void*)zone->header + META_SIZE_ZONE;
         while(tmp)
         {
             if ((void*)tmp == ptr)
             {
                 tmp->free = 1;
                 tmp->size = 0;
-            	ft_putstr("==> free done !!!!\n");
+            	// ft_putstr("==> free done !!!!\n");
                 free_mem = 1;
                 break;
             }
@@ -36,26 +36,26 @@ void			free_zone(void *ptr, t_zone *zone)
         }
         zone = zone->next ;
     }
-    if (free_mem)
-    	ft_putstr("free done !!!!\n");
-    else
-    	ft_putstr("NO free !!!\n");
+    // if (free_mem)
+    // 	ft_putstr("free done !!!!\n");
+    // else
+    // 	ft_putstr("NO free !!!\n");
 }
 
 void			free(void *ptr)
 {
-    ft_puthexa((unsigned long)ptr);
-    ft_puthexa((unsigned long)global_env.tiny);
-    ft_putstr(" | ");
-    ft_puthexa((unsigned long)global_env.small);
-    ft_putstr(" | ");
-    ft_puthexa((unsigned long)global_env.large);
+    // ft_puthexa((unsigned long)ptr);
+    // ft_puthexa((unsigned long)global_env.tiny);
+    // ft_putstr(" | ");
+    // ft_puthexa((unsigned long)global_env.small);
+    // ft_putstr(" | ");
+    // ft_puthexa((unsigned long)global_env.large);
     free_zone(ptr, global_env.tiny);
     free_zone(ptr, global_env.small);
     free_zone(ptr, global_env.large);
 }
 
-void          *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size)
+void            *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size)
 {
     t_header    *tmp;
     // int ok;
@@ -70,14 +70,14 @@ void          *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size)
             {
                 tmp->free = 0;
 				tmp->size = size;
-            	ft_putstr("==> realloc done !!!!\n");
+            	// ft_putstr("==> realloc done !!!!\n");
                 return (void*)ptr;
             }
             tmp = tmp->next;
         }
         zone = zone->next ;
     }
-    ft_putstr("XXX no realloc \n");
+    // ft_putstr("XXX no realloc \n");
     return (void*)ptr;
 }
 
