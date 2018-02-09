@@ -13,33 +13,29 @@
 #include "malloc.h"
 // #include <stdlib.h>
 
-int main (int ac, char **av) {
-  puts("coucou");
-  char *m;
-  char *n;
-  // m = malloc(sizeof(int));
-  puts("coucou");
-  m = malloc(137999999);
-  n = malloc(137999999);
+// int main (int ac, char **av) {
+//   puts("coucou");
+//   char *m;
+//   // m = malloc(sizeof(int));
+//   puts("coucou");
+//   m = malloc(42);
 
-  m = "lol";
-  n = "lol2";
+//   m = "lol";
 
-  puts(m);
-  puts(n);
-  return 0;
-}
-
-
-// int main()
-// {
-//   int i;
-//   char *addr;
-//
-//   i = 0;
-//   while (i < 1024)
-//   {
-//     i++;
-//   }
-//   return (0);
+//   puts(m);
+//   return 0;
 // }
+
+
+int main()
+{
+  int i;
+  char *addr;
+
+  i = 0;
+  while (i < 1024)
+  {
+    i++;
+  }
+  return (0);
+}
