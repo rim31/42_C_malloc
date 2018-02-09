@@ -18,7 +18,7 @@
 #include <stdio.h>
 #define TINY            128//(128+24)*100/4096 = 3.71 ==> 4 getpagesize
 #define SMALL           1024
-#define LARGE           10000
+#define LARGE           1
 #define TRUE            1
 #define FALSE           0
 #define META_SIZE_HEAD  sizeof(struct s_header)
@@ -61,7 +61,7 @@ typedef struct          s_env
 t_env                   global_env;
 
 void                    free(void *ptr);
-void			      free_zone(void *ptr, t_zone *zone);
+void			              free_zone(void *ptr, t_zone *zone);
 void                    *malloc(size_t size);
 void                    *realloc(void *ptr, size_t size);
 void                    ft_show_alloc_mem(void);
@@ -75,14 +75,17 @@ void                    print_list_zone(t_zone *liste);
 void                    print_all(void);
 t_header                *init_header_tiny(t_zone *ptr);
 t_header                *init_header_small(t_zone *ptr);
+t_header                *init_header_large(t_zone *ptr);
 t_header                *find_empty_bloc_tiny(size_t size);
 t_header                *find_empty_bloc_small(size_t size);
+t_header                *find_empty_bloc_large(size_t size);
 t_header                *create_new_tiny(size_t size);
 t_header                *create_new_small(size_t size);
+t_header                *create_new_large(size_t size);
 t_header                *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size);
 void                    *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size);
 void	                  *ft_memccpy(void *dest, const void *src, int c, size_t n);
-void                    *ft_memory_copy(void *src, void *dest);
+void                    *ft_memory_copy(void *src, void *dest, size_t size);
 
 
 

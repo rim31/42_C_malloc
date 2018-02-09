@@ -60,6 +60,7 @@ void		ft_puthexa(size_t ptr)
 {
 	size_t	i;
 
+	ptr = (unsigned long)ptr;
 	i = 0;
 	if (ptr)
 	{
@@ -117,15 +118,24 @@ void 		print_list_zone(t_zone *liste)
 
 void			print_all(void)
 {
-	int i = 0;
 	// t_header	*tmp;
 	t_zone		*tiny_zone;
+	t_zone		*small_zone;
+	t_zone		*large_zone;
 
 	tiny_zone = global_env.tiny;
-	ft_putstr("\n ==");
-	ft_putnbr(i);
-	ft_putstr("== | \n");
-	print_list_zone( global_env.tiny);
+	ft_puthexa((unsigned long)tiny_zone);
+	ft_putstr("\n == tiny == \n");
+	// print_list_zone( global_env.tiny);
+	small_zone = global_env.small;
+	ft_puthexa((unsigned long)small_zone);
+	ft_putstr("\n == small == \n");
+	// print_list_zone( global_env.small);
+	large_zone = global_env.large;
+	ft_puthexa((unsigned long)large_zone);
+	ft_putstr("\n == large == \n");
+	print_list_zone( global_env.large);
+
 	// while(tiny_zone)
 	// {
 	// 	i = 1;
@@ -137,5 +147,4 @@ void			print_all(void)
 	// 	tiny_zone = tiny_zone->next ;
 	// 	// ft_puthexa((unsigned long)tiny_zone);
 	// }
-	ft_puthexa((unsigned long)tiny_zone);
 }

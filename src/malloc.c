@@ -33,6 +33,14 @@ int			init(size_t size)
 		// ft_putstr("init small\n");
 		init_header_small(global_env.small);
 	}
+	if (!global_env.large)
+	{
+		if (!(global_env.large = mmap(0, getpagesize() * (1), PROT_READ | PROT_WRITE, MAP_ANON |
+		MAP_PRIVATE, -1, 0)))
+			return (FALSE);
+		// ft_putstr("init large\n");
+		init_header_large(global_env.large);
+	}
 	return (ok);
 }
 
@@ -58,7 +66,8 @@ void			*malloc(size_t size)
 		// current_head = find_empty_bloc(size, global_env.small, SMALL);
 		current_head = find_empty_bloc_small(size);
 	else
-		current_head = find_empty_bloc(size, global_env.large, LARGE);
+		current_head = find_empty_bloc_large(size);
+		// current_head = find_empty_bloc(size, global_env.large, LARGE);
 	if (current_head)
 	{
 		current_head->free = FALSE;
@@ -84,17 +93,44 @@ void			*malloc(size_t size)
 void			*realloc(void *ptr, size_t size)
 {
 	void 		*tmp;
+	void 		*tmp2;
+	// print_all();
+	tmp2 = NULL;
 	if (ptr == NULL)
+	{
 		tmp = malloc(size);
+		ft_putstr("\n======realloc========\n");
+		ft_puthexa((unsigned long)tmp);
+		return (tmp);
+	}
 	else
 	{
 		if (size <= TINY)
-			tmp = find_empty_bloc(size, global_env.tiny, TINY);
+			tmp2 = find_empty_bloc_tiny(size);
 		else if (size <= SMALL)
-			tmp = find_empty_bloc(size, global_env.small, SMALL);
+			tmp2 = find_empty_bloc_small(size);
 		else
-			tmp = find_empty_bloc(size, global_env.large, LARGE);
-		tmp = ft_memory_copy(tmp, ptr);
+			{
+				ft_putstr("\n==========LARGE empty block===========\n");
+				ft_putnbr(size);
+				tmp2 = find_empty_bloc_large(size);
+
+				return (NULL);
+				ft_putstr("\n======LARGE FIND empty block==========\n");
+			}
+		ft_putstr("\n======realloc2==========\n");
+
+		// ft_putnbr((t_header)tmp2->size);
+		ft_putstr("\n");
+		if (tmp2)
+		{
+			ft_puthexa((unsigned long)tmp2);
+			ft_putstr("\n");
+			tmp = ft_memory_copy(tmp2, ptr, size);
+		}
+		else
+			tmp = create_new_tiny(size);
+		ft_puthexa((unsigned long)tmp);
 	}
 	ft_putstr("REALLOC\n");
 	return (tmp);

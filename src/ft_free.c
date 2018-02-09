@@ -69,7 +69,7 @@ void            *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size
             if (tmp == ptr && size <= nb_size)
             {
                 tmp->free = 0;
-				tmp->size = size;
+				        tmp->size = size;
             	// ft_putstr("==> realloc done !!!!\n");
                 return (void*)ptr;
             }
@@ -81,43 +81,60 @@ void            *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size
     return (void*)ptr;
 }
 
-void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
-{
-	size_t i;
+// void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
+// {
+// 	size_t i;
+//
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
+// 		if (((unsigned char*)src)[i] == (unsigned char)c)
+// 			return (&dest[i + 1]);
+// 		i++;
+// 	}
+// 	return (NULL);
+// }
 
+void * ft_memory_copy(void *src, void *dest, size_t size)
+{
+  size_t			i;
+	unsigned char	*s1;
+	unsigned char	*s2;
+  t_header  *h_src;
+  t_header  *h_dest;
+
+  if (src == NULL)
+  {
+      src = malloc(size);
+      h_src = src;
+      return (src);
+  }
+
+  h_src = src - META_SIZE_HEAD;
+  h_dest = dest - META_SIZE_HEAD;
 	i = 0;
-	while (i < n)
+	s1 = (unsigned char *)dest;
+	s2 = (unsigned char *)src;
+  ft_putstr("ft_copy_memory : src => ");
+  ft_puthexa((unsigned long)src);
+  ft_putstr("\n");
+  ft_putstr("ft_copy_memory : header => ");
+  ft_puthexa((unsigned long)h_src);
+  ft_putstr("\n");
+  ft_putstr("ft_copy_memory : size \n");
+  if (h_src->size)
+    ft_putnbr(h_src->size);
+  ft_putstr("\n_____^^ realloc NULL ^^_____\n");
+
+	while (i < h_src->size)
 	{
-		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
-		if (((unsigned char*)src)[i] == (unsigned char)c)
-			return (&dest[i + 1]);
+		s1[i] = s2[i];
 		i++;
 	}
-	return (NULL);
-}
-
-
-void    *ft_memory_copy(void *src, void *dest)
-{
-    size_t			i;
-    unsigned char	*s1;
-    unsigned char	*s2;
-    t_header  *h_src;
-    t_header  *h_dest;
-
-    h_src = src - META_SIZE_HEAD;
-    h_dest = dest - META_SIZE_HEAD;
-        i = 0;
-        s1 = (unsigned char *)dest;
-        s2 = (unsigned char *)src;
-        while (i < h_src->size)
-        {
-            s1[i] = s2[i];
-            i++;
-        }
-    h_dest->free = 0;
-    h_dest->size = h_src->size;
-    h_src->free = 1;
-    h_src->size = 0;
+  h_dest->free = 0;
+  h_dest->size = h_src->size;
+  h_src->free = 1;
+  h_src->size = 0;
 	return (dest);
 }

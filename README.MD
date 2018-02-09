@@ -22,5 +22,6 @@ r
 
 =============
 
-Large a faire
+en train de faire les larges car segfault sur les realloc large test3
 
+// ft_putstr("\n_____vvvv_____\n");

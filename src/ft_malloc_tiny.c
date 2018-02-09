@@ -40,7 +40,7 @@ t_header		*init_header_tiny(t_zone *ptr)
 	return ((void*)ptr->header + META_SIZE_HEAD + TINY);
 }
 
-t_header          *find_empty_bloc_tiny(size_t size)//accomode avec la SIZE 
+t_header          *find_empty_bloc_tiny(size_t size)//accomode avec la SIZE
 {
       t_zone      *tiny_zone;
       t_header    *tmp;
@@ -86,13 +86,13 @@ t_header          *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size)
 			// ft_puthexa((unsigned long)tmp);
 			// ft_putstr("\n_____^^^^_____\n");
 		}
-        while(tmp)//!! 
+        while(tmp)//!!
         {
-			ft_putnbr(tmp->free);
+						ft_putnbr(tmp->free);
             if (tmp->free && size <= nb_size)
             {
                 tmp->free = 0;
-				tmp->size = size;
+								tmp->size = size;
             	// ft_putstr("==> free done !!!!\n");
                 return (tmp);
             }
