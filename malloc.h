@@ -64,6 +64,7 @@ void                    free(void *ptr);
 void			              free_zone(void *ptr, t_zone *zone);
 void                    *malloc(size_t size);
 void                    *realloc(void *ptr, size_t size);
+void                    show_alloc_mem(void);
 void                    ft_show_alloc_mem(void);
 void                    ft_putchar(char c);
 void                    ft_putnbr(int n);
