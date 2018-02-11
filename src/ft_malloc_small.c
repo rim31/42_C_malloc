@@ -41,37 +41,41 @@ t_header		*init_header_small(t_zone *ptr)
 	// return (tmp);
 }
 
-t_header          *find_empty_bloc_small(size_t size)//accomode avec la SIZE 
+t_header          *find_empty_bloc_small(size_t size)//accomode avec la SIZE
 {
-      t_zone      *small_zone;
-      t_header    *tmp;
+	t_zone      *small_zone;
+	t_header    *tmp;
 
-      small_zone = global_env.small;
-    //   ft_puthexa((unsigned long)small_zone);
-      if (size <= SMALL)
-      {
-            while(small_zone)
-            {
-                  tmp = global_env.small->header;
-                  while(tmp)//on itere 103x plutot aue 100 car il reste de la place dans la memoire 4* 4096 / 152
-                  {
-					// ft_putstr(" ");
-					// ft_puthexa((unsigned long)tmp);
-					// ft_putstr("    ");
-					// ft_putnbr(tmp->free);
-					// ft_putstr("    ");
-					// ft_putnbr(tmp->size);
-					// ft_putstr("\n");
-                        if (tmp->free == 1)
+	small_zone = global_env.small;
+	//   ft_puthexa((unsigned long)small_zone);
+	if (size <= SMALL)
+	{
+		while(small_zone)
+		{
+			tmp = global_env.small->header;
+			while(tmp)//on itere 103x plutot aue 100 car il reste de la place dans la memoire 4* 4096 / 152
+			{
+				// ft_putstr(" ");
+				// ft_puthexa((unsigned long)tmp);
+				// ft_putstr("    ");
+				// ft_putnbr(tmp->free);
+				// ft_putstr("    ");
+				// ft_putnbr(tmp->size);
+				// ft_putstr("\n");
+
+				// if (!tmp->free)
+				// 	return (NULL);
+				// else
+				if (tmp->free == 1)
 					return (tmp);
-                        tmp = tmp->next;
-                  }
+				tmp = tmp->next;
+			}
 
-                  small_zone = small_zone->next ;
-            }
-      }
+			small_zone = small_zone->next ;
+		}
+	}
 	// ft_putstr("NULL !!!!\n");
-      return (NULL);///PENSER A RETOURNER le POINTEUR + 28(pour pas ecraser le header)
+	return (NULL);///PENSER A RETOURNER le POINTEUR + 28(pour pas ecraser le header)
 }
 
 
@@ -88,10 +92,10 @@ t_header		*create_new_small(size_t size)
 	(void)size;
 	small_zone = (t_zone*)global_env.small;
 	while(small_zone->next)
-		small_zone = small_zone->next ;
+	small_zone = small_zone->next ;
 	if (!(new_small = mmap(0, getpagesize() * (4), PROT_READ | PROT_WRITE, MAP_ANON |
 	MAP_PRIVATE, -1, 0)))
-		return (NULL);//RISQUE DE SEGFAULT , ilfaut vaut mieux mettre un EXIT(0)
+	return (NULL);//RISQUE DE SEGFAULT , ilfaut vaut mieux mettre un EXIT(0)
 	// ft_puthexa((unsigned long)new_small);
 	small_zone->next = new_small;
 	new_small->next = NULL;

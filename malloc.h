@@ -75,7 +75,7 @@ void                    print_list_zone(t_zone *liste);
 void                    print_all(void);
 t_header                *init_header_tiny(t_zone *ptr);
 t_header                *init_header_small(t_zone *ptr);
-t_header                *init_header_large(t_zone *ptr);
+t_header                *init_header_large(t_zone *ptr, size_t size);
 t_header                *find_empty_bloc_tiny(size_t size);
 t_header                *find_empty_bloc_small(size_t size);
 t_header                *find_empty_bloc_large(size_t size);

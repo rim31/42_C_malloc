@@ -21,7 +21,7 @@ void			free_zone(void *ptr, t_zone *zone)
     free_mem = 0;
     while(zone)
     {
-        tmp = (void*)zone->header + META_SIZE_ZONE;
+        tmp = ((t_header*)(void*)zone->header + META_SIZE_ZONE);
         while(tmp)
         {
             if ((void*)tmp == ptr)

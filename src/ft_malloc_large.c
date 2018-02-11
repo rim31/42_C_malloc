@@ -12,7 +12,7 @@
 
 #include "malloc.h"
 
-t_header		*init_header_large(t_zone *ptr)
+t_header		*init_header_large(t_zone *ptr, size_t size)
 {
 	ft_putstr("\n_____init head large_____\n");
 	t_header 	*tmp;
@@ -22,27 +22,35 @@ t_header		*init_header_large(t_zone *ptr)
 	ptr->header = tmp;
 	ptr->next = NULL;
 		tmp->free = 1;
-		tmp->size = META_SIZE_ZONE + META_SIZE_HEAD + 1;
+		tmp->size = size;
 		tmp->next = NULL;
-	ft_putstr("\n_____end init head large_____\n");
+		ft_puthexa((unsigned long)tmp);
+		ft_putstr("\nFREE : ");
+		ft_putnbr(tmp->free);
+		ft_putstr("\nSIZE : ");
+		ft_putnbr(tmp->free);
+	ft_putstr("\n_____^^end init head large^^_____\n");
+
 	return ((void*)ptr->header + META_SIZE_ZONE + META_SIZE_HEAD + 1);
 }
 
-t_header          *find_empty_bloc_large(size_t size)//accomode avec la SIZE
+t_header      *find_empty_bloc_large(size_t size)//accomode avec la SIZE
 {
 	ft_putstr("\n_____find empty large_____\n");
 
   t_zone      *large_zone;
   t_header    *tmp;
 
-	print_all();
+	if (size <= 0)
+		ft_putstr("size NULL large");	// print_all();
   large_zone = global_env.large;
-	(void)size;
   while(large_zone)
   {
 		tmp = global_env.large->header;
 		ft_puthexa((unsigned long)tmp);
-		ft_putstr("\n");
+		ft_putstr("\nFREE : ");
+		ft_putnbr(tmp->free);
+		ft_putstr("\nSIZE : ");
 		ft_putnbr(tmp->free);
 		ft_putstr("\n_____^^ find large ^^_____\n");
 		while(tmp)// 4* 4096 / 152
@@ -51,8 +59,10 @@ t_header          *find_empty_bloc_large(size_t size)//accomode avec la SIZE
 			ft_putstr("\n");
 			ft_putnbr(tmp->free);
 			ft_putstr("\n_____^^ find large ^^_____\n");
-				if (tmp->free == 1)
-			return (tmp);
+			if (!tmp->free)
+				return (NULL);
+			else if (tmp->free == 1 && tmp->size >= size)
+				return ((void*)tmp + tmp->size);
 			tmp = tmp->next;
 		}
 		large_zone = large_zone->next ;
@@ -67,23 +77,20 @@ t_header			*create_new_large(size_t size)
 	t_zone 		*large_zone;
 	t_zone 		*new_large;
 	t_header 	*tmp;
-	int 	i;
-
-	i = 0;
-	(void)size;
 
 	large_zone = (t_zone*)global_env.large;
 	ft_puthexa((unsigned long)large_zone);
-	ft_putstr("\n_____^^ glob large ^^_____\n");
+	ft_putstr("\n_____^^ create large ^^_____\n");
 	while(large_zone->next)
-		large_zone = large_zone->next ;
+		large_zone = large_zone->next;
+	ft_puthexa((unsigned long)large_zone);
 	if (!(new_large = mmap(0, getpagesize() * ((size / 4096) + 1), PROT_READ | PROT_WRITE, MAP_ANON |
 	MAP_PRIVATE, -1, 0)))
 		return (NULL);//RISQUE DE SEGFAULT , ilfaut vaut mieux mettre un EXIT(0)
 	large_zone->next = new_large;
 	new_large->next = NULL;
 
-	tmp = init_header_large(new_large);
+	tmp = init_header_large(new_large, size);
 
 	return (tmp);
 }

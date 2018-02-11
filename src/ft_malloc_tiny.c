@@ -61,8 +61,10 @@ t_header          *find_empty_bloc_tiny(size_t size)//accomode avec la SIZE
 					// ft_putstr("    ");
 					// ft_putnbr(tmp->size);
 					// ft_putstr("\n");
-						if (tmp->free == 1)
-					return (tmp);
+					if (!tmp->free)
+						return (NULL);
+					else if (tmp->free == 1)
+						return (tmp);
 					tmp = tmp->next;
 				}
 
@@ -73,35 +75,35 @@ t_header          *find_empty_bloc_tiny(size_t size)//accomode avec la SIZE
       return (NULL);///PENSER A RETOURNER le POINTEUR + 28(pour pas ecraser le header)
 }
 
-t_header          *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size)
-{
-    t_header    *tmp;
-
-    while(zone)
-    {
-        if (zone->header)
-		{
-			tmp = zone->header;
-			// ft_putstr("\n_____vvvv_____\n");
-			// ft_puthexa((unsigned long)tmp);
-			// ft_putstr("\n_____^^^^_____\n");
-		}
-        while(tmp)//!!
-        {
-						ft_putnbr(tmp->free);
-            if (tmp->free && size <= nb_size)
-            {
-                tmp->free = 0;
-								tmp->size = size;
-            	// ft_putstr("==> free done !!!!\n");
-                return (tmp);
-            }
-            tmp = tmp->next;
-        }
-        zone = zone->next ;
-    }
-	return (NULL);
-}
+// t_header          *find_empty_bloc(size_t size, t_zone *zone, size_t nb_size)
+// {
+//     t_header    *tmp;
+//
+//     while(zone)
+//     {
+//         if (zone->header)
+// 		{
+// 			tmp = zone->header;
+// 			// ft_putstr("\n_____vvvv_____\n");
+// 			// ft_puthexa((unsigned long)tmp);
+// 			// ft_putstr("\n_____^^^^_____\n");
+// 		}
+//         while(tmp)//!!
+//         {
+// 						ft_putnbr(tmp->free);
+//             if (tmp->free && size <= nb_size)
+//             {
+//                 tmp->free = 0;
+// 								tmp->size = size;
+//             	// ft_putstr("==> free done !!!!\n");
+//                 return (tmp);
+//             }
+//             tmp = tmp->next;
+//         }
+//         zone = zone->next ;
+//     }
+// 	return (NULL);
+// }
 
 t_header			*create_new_tiny(size_t size)
 {

@@ -14,9 +14,6 @@
 
 int			init(size_t size)
 {
-	int		ok;
-
-	ok = TRUE;
 	if (size <= TINY && !global_env.tiny)
 	{
 		if (!(global_env.tiny = mmap(0, getpagesize() * (4), PROT_READ | PROT_WRITE, MAP_ANON |
@@ -35,48 +32,51 @@ int			init(size_t size)
 	}
 	if (!global_env.large)
 	{
-		if (!(global_env.large = mmap(0, getpagesize() * (1), PROT_READ | PROT_WRITE, MAP_ANON |
+		if (!(global_env.large = mmap(0, getpagesize() * (42), PROT_READ | PROT_WRITE, MAP_ANON |
 		MAP_PRIVATE, -1, 0)))
 			return (FALSE);
 		// ft_putstr("init large\n");
-		init_header_large(global_env.large);
+		init_header_large(global_env.large, 42);
 	}
-	return (ok);
+	return (TRUE);
 }
 
 void			*malloc(size_t size)
 {
-	// ft_putnbr(size);
-	// ft_putstr(" go malloc \n\n");
+	ft_putstr("\n\n");
+	ft_putnbr(size);
+	ft_putstr(" --> go malloc \n\n");
 	t_header	*current_head;
 	void 		*base;
 
-	// print_all();
-	// ft_puthexa((unsigned long)global_env.tiny);
-	// ft_putstr("\n");
 	current_head = NULL;
 	if (!size)
 		return (NULL);
 	if (!init(size))
 		return (NULL);
 	if (size <= TINY)
-		// current_head = find_empty_bloc(size, global_env.tiny, TINY);
 		current_head = find_empty_bloc_tiny(size);
 	else if (size <= SMALL)
-		// current_head = find_empty_bloc(size, global_env.small, SMALL);
 		current_head = find_empty_bloc_small(size);
 	else
 		current_head = find_empty_bloc_large(size);
-		// current_head = find_empty_bloc(size, global_env.large, LARGE);
+	ft_putstr("\n_____malloc-find_empty_bloc_____\n");
+	ft_puthexa((unsigned long)current_head);
 	if (current_head)
 	{
 		current_head->free = FALSE;
 		current_head->size = size;
-		return current_head + META_SIZE_HEAD;
+		return ((void*)current_head + META_SIZE_HEAD);
 	}
 	else
-	{// ft_putstr("MALLOC pas TROUVE\n");
-		base =  create_new_tiny(size);// ! il faut recuperer le pointeur
+	{
+		ft_putstr("MALLOC pas TROUVE\n");
+		if (size <= TINY)
+			base =  create_new_tiny(size);// ! il faut recuperer le pointeur
+		else if (size <= SMALL)
+			base = create_new_small(size);// ! il faut recuperer le pointeur
+		else
+			base = (void*)create_new_large(size);// ! il faut recuperer le pointeur
 		// ft_putstr("\n\n ===============\n\n ");
 		// ft_puthexa((unsigned long)base);
 		// ft_putstr("\n\n ===============\n\n ");
@@ -114,8 +114,7 @@ void			*realloc(void *ptr, size_t size)
 				ft_putstr("\n==========LARGE empty block===========\n");
 				ft_putnbr(size);
 				tmp2 = find_empty_bloc_large(size);
-
-				return (NULL);
+				// return (NULL);
 				ft_putstr("\n======LARGE FIND empty block==========\n");
 			}
 		ft_putstr("\n======realloc2==========\n");
@@ -125,14 +124,21 @@ void			*realloc(void *ptr, size_t size)
 		if (tmp2)
 		{
 			ft_puthexa((unsigned long)tmp2);
-			ft_putstr("\n");
+			ft_putstr(" tmp2 existe\n");
 			tmp = ft_memory_copy(tmp2, ptr, size);
 		}
 		else
-			tmp = create_new_tiny(size);
+			{
+				if (size <= TINY)
+					tmp = create_new_tiny(size);
+				else if (size <= SMALL)
+					tmp = create_new_small(size);
+				else
+					tmp = create_new_large(size);
+			}
 		ft_puthexa((unsigned long)tmp);
 	}
-	ft_putstr("REALLOC\n");
+	ft_putstr("\nREALLOC\n");
 	return (tmp);
 }
 

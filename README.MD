@@ -22,6 +22,11 @@ r
 
 =============
 
+test 1 ok
+test 2 ok
+pb find empty small : if !tmp->free
+
+
 en train de faire les larges car segfault sur les realloc large test3
 
 // ft_putstr("\n_____vvvv_____\n");
