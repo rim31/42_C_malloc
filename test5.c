@@ -10,7 +10,7 @@ int main()
   malloc(1024 * 1024);
   malloc(1024 * 1024 * 16);
   malloc(1024 * 1024 * 128);
-  ft_show_alloc_mem();
+  show_alloc_mem();
   return (0);
 }
 

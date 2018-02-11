@@ -82,11 +82,11 @@ void			*realloc(void *ptr, size_t size)
 	void 		*tmp2;
 
 	tmp2 = NULL;
+	tmp = NULL;
 	if (ptr == NULL)
-	{
-		tmp = malloc(size);
-		return (tmp);
-	}
+		return(malloc(size));
+	else if (ptr && size == 0)
+		free(ptr);
 	else
 	{
 		if (size <= TINY)
@@ -96,7 +96,10 @@ void			*realloc(void *ptr, size_t size)
 		else
 			tmp2 = find_empty_bloc_large(size);
 		if (tmp2)
+		{
 			tmp = ft_memory_copy(tmp2, ptr, size);
+			free(ptr);
+		}
 		else
 			{
 				if (size <= TINY)
@@ -106,17 +109,13 @@ void			*realloc(void *ptr, size_t size)
 				else
 					tmp2 = create_new_large(size);
 				tmp = ft_memory_copy(tmp2, ptr, size);
+				free(ptr);
 			}
 	}
 	return (tmp);
 }
 
 void      show_alloc_mem(void)
-{
-	print_all();
-}
-
-void      ft_show_alloc_mem(void)
 {
 	print_all();
 }
