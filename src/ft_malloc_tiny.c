@@ -42,20 +42,19 @@ t_header          *find_empty_bloc_tiny(size_t size)
       tiny_zone = global_env.tiny;
       if (size <= TINY)
       {
-            while(tiny_zone)
-            {
-				tmp = global_env.tiny->header;
-				while(tmp)
-				{
-					if (!tmp->free)
-						return (NULL);
-					else if (tmp->free == 1)
-						return (tmp);
-					tmp = tmp->next;
-				}
-
-				tiny_zone = tiny_zone->next ;
-            }
+        while(tiny_zone)
+        {
+					tmp = global_env.tiny->header;
+					while(tmp)
+					{
+						if (!tmp->free)
+							return (NULL);
+						else if (tmp->free == 1)
+							return (tmp);
+						tmp = tmp->next;
+					}
+					tiny_zone = tiny_zone->next ;
+        }
       }
       return (NULL);
 }

@@ -81,7 +81,7 @@ void 		print_list_header(t_header *liste)
 
 	i = 1;
 	ft_putstr("\nprint_list_head : \n");
-	ft_putstr("i adress       free  size\n");
+	ft_putstr("i adress       free  size         char*\n");
   	while(liste && i <= 100)
   	{
 		ft_putnbr(i);
@@ -90,7 +90,9 @@ void 		print_list_header(t_header *liste)
 	  	ft_putstr("    ");
 		ft_putnbr(liste->free);
 	  	ft_putstr("    ");
-		ft_putnbr(liste->size);
+			ft_putnbr(liste->size);
+	  	ft_putstr("        ");
+			ft_putstr((char*)((void*)liste+META_SIZE_HEAD));
 	  	ft_putstr("\n");
 	  	liste = liste->next;
 		i++;

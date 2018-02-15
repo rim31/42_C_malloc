@@ -70,10 +70,29 @@ void			*malloc(size_t size)
 			base = (void*)create_new_large(size);
 		return base;
 	}
-	//===========
-	// print_all();
-	//===========
 	return (NULL);
+}
+
+
+t_header          *find_ptr(void* ptr, t_zone* zone)
+{
+    t_header    *tmp;
+
+    while(zone)
+    {
+			tmp = (t_header*)zone->header;
+			while(tmp)
+			// while(tmp->next)
+			{
+				if (!tmp->free)
+					return (NULL);
+				if (ptr == tmp + META_SIZE_HEAD)
+					return (ptr);
+				tmp = tmp->next;
+			}
+			zone = zone->next ;
+    }
+    return (NULL);
 }
 
 void			*realloc(void *ptr, size_t size)
@@ -83,6 +102,16 @@ void			*realloc(void *ptr, size_t size)
 
 	tmp2 = NULL;
 	tmp = NULL;
+	if (!find_ptr(ptr, global_env.tiny))
+	{
+		if (!find_ptr(ptr, global_env.small))
+		{
+			if (!find_ptr(ptr, global_env.large))
+				ft_putstr("X");
+				// return (NULL);
+		}
+	}
+
 	if (ptr == NULL)
 		return(malloc(size));
 	else if (ptr && size == 0)
@@ -90,27 +119,28 @@ void			*realloc(void *ptr, size_t size)
 	else
 	{
 		if (size <= TINY)
-			tmp2 = find_empty_bloc_tiny(size);
-		else if (size <= SMALL)
-			tmp2 = find_empty_bloc_small(size);
-		else
-			tmp2 = find_empty_bloc_large(size);
-		if (tmp2)
 		{
-			tmp = ft_memory_copy(tmp2, ptr, size);
-			free(ptr);
+			tmp2 = (void*)find_empty_bloc_tiny(size);
+			if (!tmp2)
+				tmp2 = (void*)create_new_tiny(size);
+		}
+		else if (size <= SMALL)
+		{
+			tmp2 = (void*)find_empty_bloc_tiny(size);
+			if (!tmp2)
+				tmp2 = (void*)create_new_tiny(size);
 		}
 		else
-			{
-				if (size <= TINY)
-					tmp2 = create_new_tiny(size);
-				else if (size <= SMALL)
-					tmp2 = create_new_small(size);
-				else
-					tmp2 = create_new_large(size);
-				tmp = ft_memory_copy(tmp2, ptr, size);
-				free(ptr);
-			}
+		{
+			tmp2 = (void*)find_empty_bloc_large(size);
+			if (!tmp2)
+				tmp2 = (void*)create_new_large(size);
+		}
+			// print_all();
+		if (!tmp2)
+			return(malloc(size));
+		tmp = ft_memory_copy(tmp2, ptr, size);
+		free(ptr);
 	}
 	return (tmp);
 }

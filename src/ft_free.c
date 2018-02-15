@@ -66,33 +66,59 @@ void            *ft_realloc(void *ptr, size_t size, t_zone *zone, size_t nb_size
     return (void*)ptr;
 }
 
-void * ft_memory_copy(void *src, void *dest, size_t size)
-{
-  size_t			i;
-	unsigned char	*s1;
-	unsigned char	*s2;
-  t_header  *h_src;
-  t_header  *h_dest;
 
-  if (src == NULL)
-  {
-      src = malloc(size);
-      h_src = src;
-      return (src);
-  }
-  h_src = src - META_SIZE_HEAD;
-  h_dest = dest - META_SIZE_HEAD;
+
+
+void  *ft_memory_copy(void *src, void *dest, size_t size)
+{
+	size_t i;
+  // t_header  *h_src;
+  // t_header  *h_dest;
+
 	i = 0;
-	s1 = (unsigned char *)dest;
-	s2 = (unsigned char *)src;
-	while (i < h_src->size)
+	while (i < size && ((unsigned char *)src)[i])
 	{
-		s1[i] = s2[i];
+		((unsigned char *)(void*)dest + META_SIZE_HEAD)[i] = ((unsigned char *)src)[i];
 		i++;
 	}
-  h_dest->free = 0;
-  h_dest->size = h_src->size;
-  h_src->free = 1;
-  h_src->size = 0;
+	// ptr->header = (t_header*)ptr;
+	// h_dest = (t_header*)dest;
+	// h_dest->free = 0;
 	return (dest);
 }
+
+// void  *ft_memory_copy(void *src, void *dest, size_t size)
+// {
+//   size_t			i;
+// 	unsigned char	*s1;
+// 	unsigned char	*s2;
+//   t_header  *h_src;
+//   t_header  *h_dest;
+//
+//   if (src == NULL)
+//   {
+//       src = malloc(size);
+//       h_src = src;
+//       return (src);
+//   }
+//   h_src = src - META_SIZE_HEAD;
+//   h_dest = dest - META_SIZE_HEAD;
+// 	i = 0;
+// 	s1 = (unsigned char *)dest;
+// 	s2 = (unsigned char *)src;
+// 	// while (s2[i] && i < size)
+// 	while (s2[i] && i < size)
+// 	{
+// 		s1[i] = s2[i];
+// 		i++;
+// 	}
+//   ft_putstr("\n__mem cp__\n");
+//   ft_putstr((char*)s2);
+//   ft_putstr((char*)s1);
+//   ft_putstr("\n__end ^^ mem ^^ cp__\n");
+//   h_dest->free = 0;
+//   h_dest->size = size;
+//   h_src->free = 1;
+//   h_src->size = 0;
+// 	return (dest);
+// }
