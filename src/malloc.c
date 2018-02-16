@@ -81,6 +81,7 @@ void			*malloc(size_t size)
 	return (NULL);
 }
 
+<<<<<<< HEAD
 // void *find_ptr(void* ptr, t_zone* zone)
 // {
 // 	t_header    *tmp;
@@ -102,6 +103,31 @@ void			*malloc(size_t size)
 // }
 
 void	*ft_find_data(void *data)
+=======
+
+t_header          *find_ptr(void* ptr, t_zone* zone)
+{
+    t_header    *tmp;
+
+    while(zone)
+    {
+			tmp = (t_header*)zone->header;
+			while(tmp)
+			// while(tmp->next)
+			{
+				if (!tmp->free)
+					return (NULL);
+				if (ptr == tmp + META_SIZE_HEAD)
+					return (ptr);
+				tmp = tmp->next;
+			}
+			zone = zone->next ;
+    }
+    return (NULL);
+}
+
+void			*realloc(void *ptr, size_t size)
+>>>>>>> f3a537371292a25ff7c64366df7798130b26c922
 {
   t_header *head;
   t_zone *zone;
@@ -185,6 +211,16 @@ void			*realloc(void *ptr, size_t size) // penser a augmenter la taille qund c'e
 
 	tmp2 = NULL;
 	tmp = NULL;
+	if (!find_ptr(ptr, global_env.tiny))
+	{
+		if (!find_ptr(ptr, global_env.small))
+		{
+			if (!find_ptr(ptr, global_env.large))
+				ft_putstr("X");
+				// return (NULL);
+		}
+	}
+
 	if (ptr == NULL)
 	{
 		return(malloc(size));
@@ -208,6 +244,7 @@ void			*realloc(void *ptr, size_t size) // penser a augmenter la taille qund c'e
 	{
 		if (size <= TINY)
 		{
+<<<<<<< HEAD
 			tmp2 = find_empty_bloc_tiny(size);
 			if (!tmp2)
 				tmp2 = create_new_tiny(size);
@@ -243,6 +280,29 @@ void			*realloc(void *ptr, size_t size) // penser a augmenter la taille qund c'e
 		// 	tmp = ft_memory_copy(tmp2, ptr, size);
 		// 	free(ptr);
 		// }
+=======
+			tmp2 = (void*)find_empty_bloc_tiny(size);
+			if (!tmp2)
+				tmp2 = (void*)create_new_tiny(size);
+		}
+		else if (size <= SMALL)
+		{
+			tmp2 = (void*)find_empty_bloc_tiny(size);
+			if (!tmp2)
+				tmp2 = (void*)create_new_tiny(size);
+		}
+		else
+		{
+			tmp2 = (void*)find_empty_bloc_large(size);
+			if (!tmp2)
+				tmp2 = (void*)create_new_large(size);
+		}
+			// print_all();
+		if (!tmp2)
+			return(malloc(size));
+		tmp = ft_memory_copy(tmp2, ptr, size);
+		free(ptr);
+>>>>>>> f3a537371292a25ff7c64366df7798130b26c922
 	}
 	return (tmp);
 }
