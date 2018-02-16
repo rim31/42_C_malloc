@@ -17,8 +17,8 @@ t_header		*init_header_tiny(t_zone *ptr)
 	int		i;
 	t_header 	*tmp;
 
-	ptr->header = (t_header*)ptr;
-	tmp = (void*)ptr->header + META_SIZE_ZONE;
+	ptr->header = (t_header*)ptr + META_SIZE_ZONE;
+	tmp = ptr->header;
 	ptr->header = tmp;
 	ptr->next = NULL;
 	i = 1;

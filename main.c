@@ -33,8 +33,9 @@ int main()
   char *addr;
 
   i = 0;
-  while (i < 1024)
+  while (i < 10)
   {
+    malloc(42);
     i++;
   }
   return (0);

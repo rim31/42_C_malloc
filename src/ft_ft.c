@@ -126,11 +126,11 @@ void			print_all(void)
 	tiny_zone = global_env.tiny;
 	ft_puthexa((unsigned long)tiny_zone);
 	ft_putstr("\n == tiny == \n");
-	// print_list_zone( global_env.tiny);
+	print_list_zone( global_env.tiny);
 	small_zone = global_env.small;
 	ft_puthexa((unsigned long)small_zone);
 	ft_putstr("\n == small == \n");
-	// print_list_zone( global_env.small);
+	print_list_zone( global_env.small);
 	large_zone = global_env.large;
 	ft_puthexa((unsigned long)large_zone);
 	ft_putstr("\n == large == \n");

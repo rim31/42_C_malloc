@@ -16,8 +16,8 @@ t_header		*init_header_large(t_zone *ptr, size_t size)
 {
 	t_header 	*tmp;
 
-	ptr->header = (t_header*)ptr;
-	tmp = (void*)ptr->header + META_SIZE_ZONE;
+	ptr->header = (t_header*)ptr + META_SIZE_ZONE;
+	tmp = (void*)ptr->header;
 	ptr->header = tmp;
 	ptr->next = NULL;
 		tmp->free = 1;

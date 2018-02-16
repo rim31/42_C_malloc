@@ -21,9 +21,16 @@ void			free_zone(void *ptr, t_zone *zone)
     free_mem = 0;
     while(zone)
     {
+      	// ft_putstr("i adress       free  size\n");
         tmp = ((t_header*)(void*)zone->header + META_SIZE_ZONE);
         while(tmp)
         {
+          // ft_puthexa((unsigned long)tmp);
+          // ft_putstr("    ");
+          // ft_putnbr(tmp->free);
+          // ft_putstr("    ");
+          // ft_putnbr(tmp->size);
+          // ft_putstr("\n");
             if ((void*)tmp == ptr)
             {
                 tmp->free = 1;
